@@ -50,7 +50,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
 
-        android:text="---"
+        android:text="@string/q3"
         android:textSize="22sp"
         android:textAlignment="center"
         android:background="@color/colorPrimary"
