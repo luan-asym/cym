@@ -70,7 +70,8 @@ class SetupActivity : AppCompatActivity() {
 
                 Log.d(TAG, "reminder prompt")
                 p.text = resources.getString(R.string.q3)
-
+            }
+            99 -> {
                 // reminder frequency picker
                 val items = arrayOf("Everyday", "Every other day", "Weekly",
                     "Bi-Weekly", "Monthly")
@@ -93,8 +94,7 @@ class SetupActivity : AppCompatActivity() {
                     }
                     show()
                 }
-            }
-            99 -> {
+
                 Log.d(TAG, "Completed")
                 p.text = resources.getString(R.string.q4)
 

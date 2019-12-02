@@ -47,13 +47,13 @@
         <Preference
             app:key="about_colin"
             app:title="Colin Huemmer"
-            app:summary="Statistics"
+            app:summary="Statistics, Call List, Notifications"
             />
 
         <Preference
             app:key="about_hamid"
             app:title="Hamid Aina"
-            app:summary="Calling List"
+            app:summary="Reading in Contacts"
             />
 
         <Preference
