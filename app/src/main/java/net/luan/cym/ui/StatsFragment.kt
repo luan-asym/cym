@@ -153,6 +153,7 @@ class StatsFragment : Fragment() {
         val barEntry = arrayListOf<BarEntry>();
         val axis = arrayListOf<String>()
         var count : Float = 0f
+        // Grab the yAxis for formatting later on
         var yAxis = barchart.getAxisLeft();
 
 
@@ -184,6 +185,7 @@ class StatsFragment : Fragment() {
             // Discovered from the following StackOverflow: https://stackoverflow.com/questions/47637653/how-to-set-x-axis-labels-in-mp-android-chart-bar-graph
             barchart.xAxis.valueFormatter = IndexAxisValueFormatter(axis)
             barchart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            // Set yAxis to be 0 by default to prevent really skewed graphs
             yAxis.setAxisMinimum(0f)
             barchart.invalidate()
         }
