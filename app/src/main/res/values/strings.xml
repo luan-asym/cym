@@ -3,13 +3,13 @@
     <string name="app_name">Call Your Mother</string>
     <string name="colin">Colin</string>
     <string name="luan">Luan</string>
-    <string name="hamid">Hamid</string>
-
+    <string name="hamid">null</string>
 
     <!-- First-time Setup -->
     <string name="welcome">Welcome</string>
     <string name="splash">Splash Screen</string>
     <string name="setup">Setup</string>
+    <string name="next">Next</string>
     <string name="skip">Skip</string>
 
     <!-- Home/Stats Screen -->
@@ -52,4 +52,26 @@
         <item name="pie">Pie Chart</item>
         <item name="bar">Bar</item>
     </array>
+
+    <!-- Questions -->
+    <string name="q1">
+        Welcome! \n\n
+        We will be asking a few questions to start off.
+        This will allow us to better cater your experience.
+    </string>
+    <string name="q2">
+        Please allow us to access your contacts and call logs.
+        We need this to allow the application to work properly. \n\n
+
+        Failure to do so will require you to allow these later in settings.
+    </string>
+    <string name="q3">
+        Almost done! \n\n
+        Lastly, please select what contacts you want us to notify you to call.
+        You can change this later.
+    </string>
+    <string name="q4">
+        All set!
+    </string>
+
 </resources>

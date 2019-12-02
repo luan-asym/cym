@@ -9,7 +9,9 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 
 class SetupActivity : AppCompatActivity() {
@@ -28,52 +30,64 @@ class SetupActivity : AppCompatActivity() {
         sharedPref = applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
         editor = sharedPref.edit()
 
-        // UI components
-        val skip = findViewById<Button>(R.id.skip)
+        // initialize UI components
+        val next = findViewById<Button>(R.id.next)
         val progress = findViewById<ProgressBar>(R.id.setup_progress)
+        val prompt = findViewById<TextView>(R.id.prompt)
 
-        // start the initial setup questions
-        //  0% -> welcome screen asking for permissions
-        // 25% -> requesting permissions
-        // 50% -> How often do you want to be reminded to contact your contact
-        // 75% ->
+        // start progress at zero and set onClick to increment by 25
         progress.progress = 0
-        when (progress.progress) {
-            0 -> {
-                Log.d(TAG, "Instructions")
-                progress.progress = 25
-            }
-            25 -> {
-
-            }
-        }
-
-
-
-        // skip button changes shared preferences to skip first-time setup next time
-        skip.setOnClickListener {
-            Log.d(TAG, "skipped setup")
-            progress.progress = 100
-            editor.putBoolean("FIRST", false)
-            editor.apply()
+        progressNext(progress.progress, prompt)
+        next.setOnClickListener {
+            progress.progress += 33
+            progressNext(progress.progress, prompt)
         }
 
         Log.d(TAG, "done")
     }
 
-    // --- Permission Handling ---
-    private fun setupPermissions() {
-        for (permission in permissionsNeeded) {
-            var granted = ContextCompat.checkSelfPermission(this, permission)
+    // --- Progress bar handling ---
+    // start the initial setup questions
+    //  0% -> welcome screen asking for permissions
+    // 25% -> requesting permissions
+    // 50% -> How often do you want to be reminded to contact your contact
+    // 75% ->
+    private fun progressNext(step: Int, p: TextView) {
+        when (step) {
+            0 -> {
+                Log.d(TAG, "Instructions")
+                p.text = resources.getString(R.string.q1)
+            }
+            33 -> {
+                Log.d(TAG, "Permission request prompt")
+                p.text = resources.getString(R.string.q2)
 
-            if (granted != PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "$permission not granted")
+                setupPermissions()
+            }
+            66 -> {
+                Log.d(TAG, "Suggesting contacts")
+                p.text = resources.getString(R.string.q3)
+
+            }
+            99 -> {
+                Log.d(TAG, "Completed")
+                p.text = resources.getString(R.string.q4)
+            }
+            else -> {
+                var intent = Intent(applicationContext, MainActivity::class.java)
+                startActivity(intent)
             }
         }
     }
 
-    private fun makeRequest() {
-        ActivityCompat.requestPermissions(this, permissionsNeeded, REQUEST_CODE)
+    // --- Permission Handling ---
+    private fun setupPermissions() {
+        // ask the first time
+        for (permission in permissionsNeeded) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, permissionsNeeded, REQUEST_CODE)
+            }
+        }
     }
 
 
@@ -86,6 +100,6 @@ class SetupActivity : AppCompatActivity() {
         private val TAG = "CYM-Debug"
 
         private val PREF_FILE = "net.luan.cym.prefs"
-        private val REQUEST_CODE = 10
+        private val REQUEST_CODE = 69
     }
 }

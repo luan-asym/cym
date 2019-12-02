@@ -45,11 +45,6 @@ class MainActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         val title = findViewById<TextView>(R.id.title)
 
-        // request permissions if not granted
-        if (!isPermissionGranted(permissions)) {
-            requestPermissions(permissions, PERMISSION_REQUEST_VAL)
-        }
-
         // create a notification channel to send notifications
         Log.d(TAG, "Attempting to create channel...")
         createChannel(getString(R.string.notification_channel_id), getString(R.string.notification_channel_name))
@@ -168,7 +163,7 @@ class MainActivity : AppCompatActivity() {
             }
             cursor.close()
         } catch (e : SecurityException) {
-            makeToast("Denied")
+            Log.d(TAG, "idk what he did here")
         }
 
         return allProcessedContacts
@@ -219,35 +214,6 @@ class MainActivity : AppCompatActivity() {
         saveAndReturnContactList("Contacts")
     }
 
-    // ----- Permission Handling -----
-    // determines whether the necessary permissions are granted
-    private fun isPermissionGranted(permissions:Array<String>): Boolean {
-        var allPermissionsGranted = true
-        for (i in permissions.indices) {
-            if (checkCallingOrSelfPermission(permissions[i]) == PackageManager.PERMISSION_DENIED) {
-                allPermissionsGranted = false
-            }
-        }
-
-        return allPermissionsGranted
-    }
-
-    // callback once requestPermissions finishes
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == PERMISSION_REQUEST_VAL) {
-            for (i in permissions.indices) {
-                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    val shouldRequestAgain = shouldShowRequestPermissionRationale(permissions[i])
-                    if (!shouldRequestAgain) {
-                        makeToast("Enable the permission(s) in Settings")
-                    }
-                }
-            }
-        }
-    }
-
     // ----- Settings Fragment -----
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -271,10 +237,6 @@ class MainActivity : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
 
         Log.d(TAG, "Channel has been created! Ready to send notifications")
-    }
-
-    private fun makeToast(message: String) {
-        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {
