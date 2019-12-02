@@ -158,7 +158,7 @@ class StatsFragment : Fragment() {
         // to pieEntries
         map.forEach{ (contact, value) -> barEntry.add( BarEntry (count++, value))}
 
-        // Get a list of contacts for the x Axis
+        // Get a list of contacts for the X-axis
         map.forEach{ (contact, _) -> axis.add(contact) }
 
         // Initalize the barchart dataset
@@ -173,14 +173,10 @@ class StatsFragment : Fragment() {
             Log.i("In SetupBarChart", "NULL")
         } else {
             Log.i("In SetupBarChart", "Not NULL")
-            data.setBarWidth(0.9f)
             barchart.setData(data)
             barchart.setFitBars(true)
             barchart.xAxis.valueFormatter = IndexAxisValueFormatter(axis)
             barchart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-            barchart.axisLeft.isEnabled = false
-            barchart.axisRight.isEnabled = false
-            barchart.description.isEnabled = false
             barchart.invalidate()
         }
     }
