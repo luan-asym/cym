@@ -40,8 +40,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // UI Components
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         val title = findViewById<TextView>(R.id.title)
+
+        // SharedPreference handler
+        sharedPref = applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
+        val freq = sharedPref.getInt("FREQ", 0)
+        editor = sharedPref.edit()
+        Log.d(TAG, "--- SHARED PREFERENCES ---")
+        Log.d(TAG, "FIRST: \t${sharedPref.getBoolean("FIRST", true)}")
+        Log.d(TAG, "FREQ: \t$freq")
+        Log.d(TAG, "--------------------------")
 
         // create a notification channel to send notifications
         Log.d(TAG, "Attempting to create channel...")
@@ -88,8 +98,6 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, callLogContacts.get(i).toString())
         }*/
 
-        sharedPref = applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
-        editor = sharedPref.edit()
         gson = GsonBuilder().create()
     }
 
@@ -161,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             }
             cursor.close()
         } catch (e : SecurityException) {
-            Log.d(TAG, "idk what he did here")
+            Log.d(TAG, e.toString())
         }
 
         return allProcessedContacts
@@ -241,7 +249,6 @@ class MainActivity : AppCompatActivity() {
         private val TAG = "CYM-Debug"
 
         private val PREF_FILE = "net.luan.cym.prefs"
-        private const val PERMISSION_REQUEST_VAL = 10
 
         lateinit var gson: Gson
         private lateinit var editor: SharedPreferences.Editor
