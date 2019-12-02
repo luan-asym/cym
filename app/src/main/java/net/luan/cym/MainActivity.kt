@@ -61,6 +61,11 @@ class MainActivity : AppCompatActivity() {
         // val notificationManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         // val notificationIntent = Intent(this, NotificationReceiver::class.java)
 
+        // default page is call page
+        if (savedInstanceState == null) {
+            bottomNav.selectedItemId = intent.getIntExtra("FRAGMENT", R.id.stats)
+        }
+
         // changes the fragment to the currently selected item
         bottomNav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -87,11 +92,6 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
-
-        // default page is call page
-        if (savedInstanceState == null) {
-             bottomNav.selectedItemId = R.id.stats
-         }
 
         callLogContacts = readCallLog(this)
         /*for (i in callLogContacts.indices) {
