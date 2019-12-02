@@ -11,14 +11,16 @@
         android:id="@+id/piechart"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:visibility="gone"
         />
 
-    <!-- <com.github.mikephil.charting.charts.BarChart
+    <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barchart"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:visibility="gone"
         />
-     -->
+
     <Spinner
         android:id="@+id/spinnerChart"
         android:layout_width="match_parent"
