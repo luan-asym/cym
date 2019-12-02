@@ -4,14 +4,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 
 class SetupActivity : AppCompatActivity() {
@@ -27,6 +26,7 @@ class SetupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_setup)
         Log.i(TAG, "--- Entered first time setup ---")
 
+        // SharedPreference handler
         sharedPref = applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
         editor = sharedPref.edit()
 
@@ -44,6 +44,7 @@ class SetupActivity : AppCompatActivity() {
         }
 
         editor.putBoolean("FIRST", false)
+        editor.commit()
 
         Log.d(TAG, "done")
     }
@@ -67,12 +68,37 @@ class SetupActivity : AppCompatActivity() {
             66 -> {
                 setupPermissions()
 
-                Log.d(TAG, "Suggesting contacts")
+                Log.d(TAG, "reminder prompt")
                 p.text = resources.getString(R.string.q3)
+
+                // reminder frequency picker
+                val items = arrayOf("Everyday", "Every other day", "Weekly",
+                    "Bi-Weekly", "Monthly")
+                val builder = AlertDialog.Builder(this)
+                with (builder) {
+                    setTitle("Pick reminder frequency")
+                    setItems(items) { dialog, freq ->
+                        Log.d(TAG, "Frequency picked: $freq")
+
+                        when (freq) {
+                            0 -> editor.putInt("FREQ", 1)
+                            1 -> editor.putInt("FREQ", 2)
+                            2 -> editor.putInt("FREQ", 7)
+                            3 -> editor.putInt("FREQ", 14)
+                            4 -> editor.putInt("FREQ", 30)
+                            else -> Log.d(TAG, "FREQUENCY PICKER ERROR")
+                        }
+
+                        editor.commit()
+                    }
+                    show()
+                }
             }
             99 -> {
                 Log.d(TAG, "Completed")
                 p.text = resources.getString(R.string.q4)
+
+                editor.putBoolean("FIRST", false)
             }
             else -> {
                 val intent = Intent(applicationContext, MainActivity::class.java)

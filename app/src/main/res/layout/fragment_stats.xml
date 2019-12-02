@@ -5,25 +5,32 @@
     android:layout_height="match_parent"
     tools:context=".ui.StatsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerChart"
+        android:layout_alignParentTop="true"
+
+        android:textAlignment="center"
+        android:entries="@array/charts"
+        />
 
     <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/piechart"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:id="@+id/piechart"
+        android:layout_below="@id/spinnerChart"
+
         android:visibility="gone"
         />
 
     <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/barchart"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:id="@+id/barchart"
+        android:layout_below="@id/spinnerChart"
+
         android:visibility="gone"
         />
 
-    <Spinner
-        android:id="@+id/spinnerChart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/charts"/>
 </RelativeLayout>

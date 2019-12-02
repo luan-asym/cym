@@ -48,6 +48,7 @@
     <string name="Nov">Nov</string>
     <string name="Dec">Dec</string>
 
+    <!-- Spinner Values -->
     <array name="charts">
         <item name="pie">Pie Chart</item>
         <item name="bar">Bar</item>

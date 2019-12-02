@@ -35,16 +35,16 @@ class SplashActivity : AppCompatActivity() {
             var intent: Intent
 
             if (sharedPref.getBoolean("FIRST", true)) {
-                Log.d(TAG, "First time")
+                Log.d(TAG, "Going to SetupActivity")
                 intent = Intent(applicationContext, SetupActivity::class.java)
             } else {
-                Log.d(TAG, "main activbity")
+                Log.d(TAG, "Going to MainActivity")
                 intent = Intent(applicationContext, MainActivity::class.java)
             }
 
             // --- DEBUG ---
             // uncomment this to always show setup
-            intent = Intent(applicationContext, SetupActivity::class.java)
+            // intent = Intent(applicationContext, SetupActivity::class.java)
 
             startActivity(intent)
             finish()
