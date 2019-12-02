@@ -27,6 +27,7 @@ import net.luan.cym.MainActivity.Companion.saveAndReturnContactList
 
 import net.luan.cym.R
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 
@@ -152,6 +153,8 @@ class StatsFragment : Fragment() {
         val barEntry = arrayListOf<BarEntry>();
         val axis = arrayListOf<String>()
         var count : Float = 0f
+        var yAxis = barchart.getAxisLeft();
+
 
         // BarCharts with this library require data entries with the following typing (float, float)
         // for each contact in the Hashmap add the position for the barchart (count) and the times contacted (value)
@@ -167,6 +170,8 @@ class StatsFragment : Fragment() {
         // set the barchart to use a non-monotonous display
         dataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
         val data = BarData(dataSet)
+        data.setValueTextSize(10f)
+
 
 
         if (barchart == null) {
@@ -175,8 +180,11 @@ class StatsFragment : Fragment() {
             Log.i("In SetupBarChart", "Not NULL")
             barchart.setData(data)
             barchart.setFitBars(true)
+            // Format the X axis to display the contact names
+            // Discovered from the following StackOverflow: https://stackoverflow.com/questions/47637653/how-to-set-x-axis-labels-in-mp-android-chart-bar-graph
             barchart.xAxis.valueFormatter = IndexAxisValueFormatter(axis)
             barchart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            yAxis.setAxisMinimum(0f)
             barchart.invalidate()
         }
     }
