@@ -26,6 +26,8 @@ import net.luan.cym.MainActivity.Companion.gson
 import net.luan.cym.MainActivity.Companion.saveAndReturnContactList
 
 import net.luan.cym.R
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 
 // Charts used are found on the following github: https://github.com/PhilJay/MPAndroidChart
@@ -148,13 +150,16 @@ class StatsFragment : Fragment() {
 
     private fun setupBarChart(map : HashMap<String, Float>) {
         val barEntry = arrayListOf<BarEntry>();
-
-        val count : Float = 0f
+        val axis = arrayListOf<String>()
+        var count : Float = 0f
 
         // BarCharts with this library require data entries with the following typing (float, float)
         // for each contact in the Hashmap add the position for the barchart (count) and the times contacted (value)
         // to pieEntries
-        map.forEach{ (contact, value) -> barEntry.add( BarEntry (count, value))}
+        map.forEach{ (contact, value) -> barEntry.add( BarEntry (count++, value))}
+
+        // Get a list of contacts for the x Axis
+        map.forEach{ (contact, _) -> axis.add(contact) }
 
         // Initalize the barchart dataset
         val dataSet = BarDataSet(barEntry, "BarDataSet")
@@ -163,6 +168,7 @@ class StatsFragment : Fragment() {
         dataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
         val data = BarData(dataSet)
 
+
         if (barchart == null) {
             Log.i("In SetupBarChart", "NULL")
         } else {
@@ -170,6 +176,11 @@ class StatsFragment : Fragment() {
             data.setBarWidth(0.9f)
             barchart.setData(data)
             barchart.setFitBars(true)
+            barchart.xAxis.valueFormatter = IndexAxisValueFormatter(axis)
+            barchart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            barchart.axisLeft.isEnabled = false
+            barchart.axisRight.isEnabled = false
+            barchart.description.isEnabled = false
             barchart.invalidate()
         }
     }
