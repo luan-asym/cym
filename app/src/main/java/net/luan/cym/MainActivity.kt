@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         // SharedPreference handler
         sharedPref = applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
-        val freq = sharedPref.getInt("FREQ", 0)
+        val freq = sharedPref.getInt("REMINDER_FREQ", 0)
         editor = sharedPref.edit()
         Log.d(TAG, "--- SHARED PREFERENCES ---")
         Log.d(TAG, "FIRST: \t${sharedPref.getBoolean("FIRST", true)}")
