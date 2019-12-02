@@ -8,8 +8,6 @@ Luan: UI Design, Splash Screen, Settings
 
 Colin: Statistics
 
-Hamid: Call List
-
 
 ## Changelog
 
