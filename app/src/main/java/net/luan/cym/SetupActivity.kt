@@ -19,7 +19,7 @@ class SetupActivity : AppCompatActivity() {
     private lateinit var sharedPref: SharedPreferences
 
     // define permissions needed
-    val permissionsNeeded = arrayOf(Manifest.permission.READ_CALL_LOG,
+    private val permissionsNeeded = arrayOf(Manifest.permission.READ_CALL_LOG,
         Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,15 +43,17 @@ class SetupActivity : AppCompatActivity() {
             progressNext(progress.progress, prompt)
         }
 
+        editor.putBoolean("FIRST", false)
+
         Log.d(TAG, "done")
     }
 
     // --- Progress bar handling ---
     // start the initial setup questions
-    //  0% -> welcome screen asking for permissions
+    //  0% -> welcome
     // 25% -> requesting permissions
-    // 50% -> How often do you want to be reminded to contact your contact
-    // 75% ->
+    // 50% -> reminder frequency
+    // 75% -> completed
     private fun progressNext(step: Int, p: TextView) {
         when (step) {
             0 -> {
@@ -61,20 +63,19 @@ class SetupActivity : AppCompatActivity() {
             33 -> {
                 Log.d(TAG, "Permission request prompt")
                 p.text = resources.getString(R.string.q2)
-
-                setupPermissions()
             }
             66 -> {
+                setupPermissions()
+
                 Log.d(TAG, "Suggesting contacts")
                 p.text = resources.getString(R.string.q3)
-
             }
             99 -> {
                 Log.d(TAG, "Completed")
                 p.text = resources.getString(R.string.q4)
             }
             else -> {
-                var intent = Intent(applicationContext, MainActivity::class.java)
+                val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -89,7 +90,6 @@ class SetupActivity : AppCompatActivity() {
             }
         }
     }
-
 
     public override fun onDestroy() {
         super.onDestroy()

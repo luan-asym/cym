@@ -56,19 +56,21 @@
     <!-- Questions -->
     <string name="q1">
         Welcome! \n\n
-        We will be asking a few questions to start off.
+        We will be asking a few questions to start off. \n\n
+
         This will allow us to better cater your experience.
     </string>
     <string name="q2">
         Please allow us to access your contacts and call logs.
         We need this to allow the application to work properly. \n\n
 
-        Failure to do so will require you to allow these later in settings.
+        Failure to do so will require you to allow these later in your phone settings.
     </string>
     <string name="q3">
         Almost done! \n\n
-        Lastly, please select what contacts you want us to notify you to call.
-        You can change this later.
+        Lastly, please select how often you want us to remind you to call your contacts. \n\n
+
+        You can change this later in the app settings.
     </string>
     <string name="q4">
         All set!

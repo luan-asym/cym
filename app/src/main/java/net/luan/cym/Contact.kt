@@ -10,8 +10,11 @@ import java.util.*
 // freq:            how often they have contacted the person within the last __ weeks
 // last_contacted:  the date they were last contacted
 //                  how to create a LocalDate: LocalDate.of(2020, Month.January, 1)
-//Note: the internal keyword was removed so that the Contact ArrayList could be stored in sharedPref
-//Note: phone number was changed to long to avoid NumberFormatException
+// alert_pref:      the frequency to remind the user to contact their contact
+// whitelisted:     shows if contact in the contact list was whitelisted
+//
+// Note: the internal keyword was removed so that the Contact ArrayList could be stored in sharedPref
+// Note: phone number was changed to long to avoid NumberFormatException
 class Contact (name: String, phone: Long, freq: Int, last_contacted: LocalDate,
                         alert_pref: Int, whitelisted: Boolean){
 

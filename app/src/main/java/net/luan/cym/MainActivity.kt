@@ -35,8 +35,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var monthMap: HashMap<String, Int>
     private var phoneNumberToName =  HashMap<String, String>()
     private var contactNameToIndex =  HashMap<String, Int>()
-    private var permissions = arrayOf(Manifest.permission.READ_CALL_LOG,
-        Manifest.permission.READ_CONTACTS, Manifest.permission.CALL_PHONE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +94,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //map to obtain the integer value for a given month
-    private fun createMap() : HashMap<String, Int> {
+    private fun createMap(): HashMap<String, Int> {
         monthMap = HashMap()
         monthMap[getString(R.string.Jan)] = 1; monthMap[getString(R.string.Feb)] = 2; monthMap[getString(R.string.Mar)] = 3
         monthMap[getString(R.string.Apr)] = 4; monthMap[getString(R.string.May)] = 5; monthMap[getString(R.string.Jun)] = 6
