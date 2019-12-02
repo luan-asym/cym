@@ -11,6 +11,7 @@
         android:id="@+id/contact_name"
         android:layout_alignParentStart="true"
         android:paddingStart="10dp"
+        android:paddingEnd="0dp"
         
         android:text="---"
         android:textSize="35sp"

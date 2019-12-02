@@ -250,6 +250,7 @@ class MainActivity : AppCompatActivity() {
 
         private val PREF_FILE = "net.luan.cym.prefs"
 
+        // Hamid code
         lateinit var gson: Gson
         private lateinit var editor: SharedPreferences.Editor
         lateinit var callLogContacts: ArrayList<Contact>

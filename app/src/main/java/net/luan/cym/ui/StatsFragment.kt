@@ -57,8 +57,7 @@ class StatsFragment : Fragment() {
     // it is apparently not type-safe to do all your work in there.
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-
-        // ---- This part was from Hamid
+        // ---- Hamid -----
         super.onActivityCreated(savedInstanceState)
         val temp = saveAndReturnContactList("Contacts")
         var i = 0
@@ -72,7 +71,7 @@ class StatsFragment : Fragment() {
             i++
         }
 
-        // ---- End part from Hamid
+        // -----  END ------
 
         Log.i("Spinner value", spinnerChart.selectedItem.toString())
 
