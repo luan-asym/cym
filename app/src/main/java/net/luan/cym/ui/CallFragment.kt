@@ -52,25 +52,18 @@ class CallFragment : Fragment() {
     }
 
 
-
-
-
-
     private fun readContacts() {
 
         // read in contacts
         val rawContacts = saveAndReturnContactList("Contacts")
-        val contactsList = arrayOf(rawContacts.size())
+
         contactsListView = getView()!!.findViewById(R.id.contact_list)
-        var i = 0
 
         Log.d(TAG, "----- CONTACTS -----")
-        for (contacts in rawContacts) {
-            Log.d(TAG, contacts.toString())
+        for (i in 0 until rawContacts.size()) {
+            Log.d(TAG, rawContacts[i].toString())
+
         }
-
-
-
     }
 
 

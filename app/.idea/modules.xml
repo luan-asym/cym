@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../CYM.iml" filepath="$PROJECT_DIR$/../CYM.iml" />
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../cym-CYM.iml" filepath="$PROJECT_DIR$/../cym-CYM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cym-app.iml" filepath="$PROJECT_DIR$/cym-app.iml" />
     </modules>
   </component>
 </project>

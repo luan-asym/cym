@@ -6,6 +6,8 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.media.AudioAttributes
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var monthMap: HashMap<String, Int>
     private var phoneNumberToName =  HashMap<String, String>()
     private var contactNameToIndex =  HashMap<String, Int>()
+
+    private var mNotificationCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +103,14 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         gson = GsonBuilder().create()
+
+        savedInstanceState?.run {
+            mNotificationCount = savedInstanceState.getInt(KEY_COUNT)
+        }
+
+        mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationChannel()
+
     }
 
     //map to obtain the integer value for a given month
@@ -245,10 +257,52 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Channel has been created! Ready to send notifications")
     }
 
+    private fun createNotificationChannel() {
+
+        mChannelID = "$packageName.channel_01"
+
+        // The user-visible name of the channel.
+        val name = getString(R.string.notification_channel_name)
+
+        // The user-visible description of the channel
+        val description = getString(R.string.notification_channel_name)
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val mChannel = NotificationChannel(mChannelID, name, importance)
+
+        // Configure the notification channel.
+        mChannel.description = description
+        mChannel.enableLights(true)
+
+        // Sets the notification light color for notifications posted to this
+        // channel, if the device supports this feature.
+        mChannel.lightColor = Color.RED
+        mChannel.enableVibration(true)
+        mChannel.vibrationPattern = mVibratePattern
+
+        mSoundURI = Uri.parse("android.resource://" + packageName + "/" + R.raw.alarm_rooster)
+        mChannel.setSound(
+                mSoundURI, AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .build()
+        )
+
+        mNotificationManager.createNotificationChannel(mChannel)
+    }
+
     companion object {
         private val TAG = "CYM-Debug"
 
         private val PREF_FILE = "net.luan.cym.prefs"
+
+        private const val MY_NOTIFICATION_ID = 1
+        private const val KEY_COUNT = "key count"
+        private lateinit var mNotificationManager: NotificationManager
+        private lateinit var mChannelID: String
+        private const val tickerText = "This is the ticker text"
+        private const val contextTitle = "Notification"
+        private const val contentText = "You have someone you need call!"
+        private val mVibratePattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+        private lateinit var mSoundURI: Uri
 
         // Hamid code
         lateinit var gson: Gson
