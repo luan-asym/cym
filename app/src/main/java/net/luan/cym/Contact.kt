@@ -2,7 +2,6 @@ package net.luan.cym
 
 import android.util.Log
 import java.time.LocalDate
-import java.util.*
 
 // Contact class takes in multiple variables
 // name:            contact's name
