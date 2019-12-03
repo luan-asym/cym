@@ -1,5 +1,9 @@
 package net.luan.cym
 
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -21,6 +25,8 @@ import net.luan.cym.ui.StatsFragment
 import java.time.LocalDate
 import java.util.*
 import androidx.appcompat.app.AlertDialog
+import net.luan.cym.util.AlarmLoggerReceiver
+import net.luan.cym.util.AlarmNotificationReceiver
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -33,9 +39,14 @@ class MainActivity : AppCompatActivity() {
     private var phoneNumberToName =  HashMap<String, String>()
     private var contactNameToIndex =  HashMap<String, Int>()
 
+    private lateinit var mAlarmManager: AlarmManager
+    private lateinit var mNotificationReceiverPendingIntent: PendingIntent
+    private lateinit var mLoggerReceiverPendingIntent: PendingIntent
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         // UI Components
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
@@ -89,6 +100,61 @@ class MainActivity : AppCompatActivity() {
 //        }
 
         allContacts = readCallLog(this)
+
+
+        // notification stuff
+
+        // Create an Intent to broadcast to the AlarmNotificationReceiver
+        val mNotificationReceiverIntent = Intent(
+            this@MainActivity,
+            AlarmNotificationReceiver::class.java
+        )
+
+        // Create an PendingIntent that holds the NotificationReceiverIntent
+        mNotificationReceiverPendingIntent = PendingIntent.getBroadcast(
+            this@MainActivity, 0, mNotificationReceiverIntent, 0
+        )
+
+        // Create an Intent to broadcast to the AlarmLoggerReceiver
+        val mLoggerReceiverIntent = Intent(
+            this@MainActivity,
+            AlarmLoggerReceiver::class.java
+        )
+
+        // Create PendingIntent that holds the mLoggerReceiverPendingIntent
+        mLoggerReceiverPendingIntent = PendingIntent.getBroadcast(
+            this@MainActivity, 0, mLoggerReceiverIntent, 0
+        )
+
+        // go through contact list and look for white listed contacts
+        for (contact in allContacts) {
+            if (contact.whitelisted) {
+                // check to if the last time contacted is greater than remainder time
+                val intended_reminder = contact.last_contacted.plusDays(contact.alert_pref.toLong())
+
+                if( intended_reminder > LocalDate.now() ) {
+                    // if intended reminder is greater than the current LocalDate, send a reminder
+                    mAlarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        System.currentTimeMillis(),
+                        mNotificationReceiverPendingIntent
+                    )
+
+                    // Set single alarm to fire shortly after previous alarm
+                    mAlarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        System.currentTimeMillis() + 1000L,
+                        mLoggerReceiverPendingIntent
+                    )
+
+                    // Show Toast message
+                    Toast.makeText(
+                        applicationContext, "Alarm has been send to remind to call contact",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
 
         // ----- HAMID -----
         gson = GsonBuilder().create()
@@ -280,15 +346,23 @@ class MainActivity : AppCompatActivity() {
     }
     // ------ END ------
 
+
+
     companion object {
         private val TAG = "CYM-Debug"
 
         private val PREF_FILE = "net.luan.cym.prefs"
 
+        // ALARMS AND NOTIFICATION SERVICES
+        private const val MY_NOTIFICATION_ID = 1
+        private const val CHANNEL_ID_STRING = ".channel_01"
+
+
         lateinit var allContacts: ArrayList<Contact>
         fun returnContactList(): ArrayList<Contact> {
             return allContacts
         }
+
 
         // ----- HAMID -----
         lateinit var gson: Gson
