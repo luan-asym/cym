@@ -63,6 +63,7 @@ class ContactListAdapter(private val context: Context,
         }
         editor.apply()
 
+        /*
         // name onClickListener to call person
         nameView.setOnClickListener {
             val phone = contact.phone
@@ -73,6 +74,7 @@ class ContactListAdapter(private val context: Context,
             context.startActivity(intent)
             System.exit(0)
         }
+         */
 
         // whitelist onClickListener
         whitelistView.setOnClickListener {
