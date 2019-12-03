@@ -96,9 +96,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // default page is call page
-        if (savedInstanceState == null) {
-            bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", R.id.call)
-        }
+        bottomNav.selectedItemId = R.id.call
 
         allContacts = readCallLog(this)
         // read contact log, make updated contact list
