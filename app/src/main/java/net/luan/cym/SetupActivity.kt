@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.widget.*
@@ -14,8 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 
 class SetupActivity : AppCompatActivity() {
-    private lateinit var editor: SharedPreferences.Editor
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     // define permissions needed
     private val permissionsNeeded = arrayOf(Manifest.permission.READ_CALL_LOG,
@@ -45,8 +46,6 @@ class SetupActivity : AppCompatActivity() {
 
         editor.putBoolean("FIRST", false)
         editor.commit()
-
-        Log.d(TAG, "done")
     }
 
     // --- Progress bar handling ---
@@ -68,7 +67,7 @@ class SetupActivity : AppCompatActivity() {
             66 -> {
                 setupPermissions()
 
-                Log.d(TAG, "reminder prompt")
+                Log.d(TAG, "Reminder prompt")
                 p.text = resources.getString(R.string.q3)
             }
             99 -> {
@@ -82,11 +81,11 @@ class SetupActivity : AppCompatActivity() {
                         Log.d(TAG, "Frequency picked: $freq")
 
                         when (freq) {
-                            0 -> editor.putInt("FREQ", 1)
-                            1 -> editor.putInt("FREQ", 2)
-                            2 -> editor.putInt("FREQ", 7)
-                            3 -> editor.putInt("FREQ", 14)
-                            4 -> editor.putInt("FREQ", 30)
+                            0 -> editor.putInt("REMINDER_FREQ", 1)
+                            1 -> editor.putInt("REMINDER_FREQ", 2)
+                            2 -> editor.putInt("REMINDER_FREQ", 7)
+                            3 -> editor.putInt("REMINDER_FREQ", 14)
+                            4 -> editor.putInt("REMINDER_FREQ", 30)
                             else -> Log.d(TAG, "FREQUENCY PICKER ERROR")
                         }
 
@@ -95,14 +94,32 @@ class SetupActivity : AppCompatActivity() {
                     show()
                 }
 
-                Log.d(TAG, "Completed")
-                p.text = resources.getString(R.string.q4)
+                // check if all permissions are granted
+                var permissionError = false
+                for (permission in permissionsNeeded) {
+                    if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                        permissionError = true
+                    }
+                }
+
+                // warn user if permission is not granted
+                if (permissionError) {
+                    Log.w(TAG, "user did not provide all permissions")
+                    p.text = resources.getString(R.string.permission_error)
+                } else {
+                    Log.d(TAG, "setup completed")
+                    p.text = resources.getString(R.string.q4)
+                }
 
                 editor.putBoolean("FIRST", false)
             }
             else -> {
+                Log.d(TAG, "starting ContactManagerActivity in whitelist mode")
+                editor.putBoolean("WHITELISTING_MODE", true)
+                editor.putInt("FRAGMENT", R.id.call)
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
     }
@@ -121,11 +138,10 @@ class SetupActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-
     companion object {
         private val TAG = "CYM-Debug"
+        private val REQUEST_CODE = 69
 
         private val PREF_FILE = "net.luan.cym.prefs"
-        private val REQUEST_CODE = 69
     }
 }
