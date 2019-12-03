@@ -45,7 +45,6 @@ class SetupActivity : AppCompatActivity() {
             progressNext(progress.progress, prompt)
         }
 
-        editor.putBoolean("FIRST", false)
         editor.putBoolean("WHITELISTING_MODE", true)
         editor.apply()
     }
@@ -115,8 +114,6 @@ class SetupActivity : AppCompatActivity() {
                     Log.d(TAG, "setup completed")
                     p.text = resources.getString(R.string.q4)
                 }
-
-                editor.putBoolean("FIRST", false)
             }
             else -> {
                 Log.d(TAG, "starting ContactManagerActivity in whitelist mode")

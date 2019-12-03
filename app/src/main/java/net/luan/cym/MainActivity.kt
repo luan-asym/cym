@@ -74,6 +74,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.call -> {
                     editor.putBoolean("WHITELISTING_MODE", false)
+
+                    if (sharedPref.getBoolean("FIRST", true)) {
+                        editor.putBoolean("FIRST", false)
+                        editor.putBoolean("WHITELISTING_MODE", true)
+                    }
+
                     editor.apply()
                     bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
 
@@ -108,8 +114,6 @@ class MainActivity : AppCompatActivity() {
 
 
         // notification stuff
-
-
         // Create an Intent to broadcast to the AlarmNotificationReceiver
         val mNotificationReceiverIntent = Intent(
             this@MainActivity,
