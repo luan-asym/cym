@@ -1,14 +1,16 @@
 package net.luan.cym.util
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.CheckBox
 import android.widget.TextView
-import kotlinx.android.synthetic.main.contact_item.view.*
 import net.luan.cym.Contact
+import net.luan.cym.MainActivity.Companion.allContacts
+import net.luan.cym.MainActivity.Companion.returnContactList
 import net.luan.cym.R
 
 class ContactListAdapter(private val context: Context,
@@ -38,10 +40,21 @@ class ContactListAdapter(private val context: Context,
         val contact = getItem(pos) as Contact
         nameView.text = contact.name
         lastContactedView.text = "Last contacted: ${contact.last_contacted.toString()}"
-        contact.whitelisted = whitelistView.isChecked
+        whitelistView.isChecked = contact.whitelisted
 
+        // changes icon to whitelist status
+        if (contact.whitelisted) {
+            whitelistView.setButtonDrawable(R.drawable.ic_checked)
+        } else {
+            whitelistView.setButtonDrawable(R.drawable.ic_star)
+        }
+
+        // whitelist onClickListener
         whitelistView.setOnClickListener {
-            contact.whitelisted = whitelistView.isChecked
+            allContacts.remove(contact)
+            contact.changeWhitelist(whitelistView.isChecked)
+            Log.d(TAG, "${contact.name} whitelist has changed to ${contact.whitelisted}")
+            allContacts.add(contact)
 
             if (contact.whitelisted) {
                 whitelistView.setButtonDrawable(R.drawable.ic_checked)
@@ -52,9 +65,6 @@ class ContactListAdapter(private val context: Context,
 
         return item
     }
-
-
-
 
     companion object {
         private val TAG = "CYM-Debug"
