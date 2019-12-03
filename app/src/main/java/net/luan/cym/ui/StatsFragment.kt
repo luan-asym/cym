@@ -21,9 +21,6 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.fragment_stats.*
 import net.luan.cym.Contact
-import net.luan.cym.MainActivity.Companion.callLogContacts
-import net.luan.cym.MainActivity.Companion.gson
-import net.luan.cym.MainActivity.Companion.saveAndReturnContactList
 import net.luan.cym.MainActivity.Companion.returnContactList
 
 import net.luan.cym.R

@@ -1,6 +1,7 @@
 package net.luan.cym.util
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +11,13 @@ import android.widget.CheckBox
 import android.widget.TextView
 import net.luan.cym.Contact
 import net.luan.cym.MainActivity.Companion.allContacts
-import net.luan.cym.MainActivity.Companion.returnContactList
 import net.luan.cym.R
 
 class ContactListAdapter(private val context: Context,
                          private val data: ArrayList<Contact>) : BaseAdapter() {
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -37,17 +40,26 @@ class ContactListAdapter(private val context: Context,
         val lastContactedView = item.findViewById<TextView>(R.id.last_contacted)
         val whitelistView = item.findViewById<CheckBox>(R.id.favorite)
 
+        // SharedPreference handler
+        sharedPref = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
+        editor = sharedPref.edit()
+
+
+        // fill in UI components
         val contact = getItem(pos) as Contact
         nameView.text = contact.name
         lastContactedView.text = "Last contacted: ${contact.last_contacted.toString()}"
         whitelistView.isChecked = contact.whitelisted
 
-        // changes icon to whitelist status
+        // changes icon to whitelist status and fills out whitelist
         if (contact.whitelisted) {
             whitelistView.setButtonDrawable(R.drawable.ic_checked)
+            editor.putBoolean(contact.name, true)
         } else {
             whitelistView.setButtonDrawable(R.drawable.ic_star)
+            editor.putBoolean(contact.name, false)
         }
+        editor.apply()
 
         // whitelist onClickListener
         whitelistView.setOnClickListener {
@@ -58,9 +70,12 @@ class ContactListAdapter(private val context: Context,
 
             if (contact.whitelisted) {
                 whitelistView.setButtonDrawable(R.drawable.ic_checked)
+                editor.putBoolean(contact.name, true)
             } else {
                 whitelistView.setButtonDrawable(R.drawable.ic_star)
+                editor.putBoolean(contact.name, false)
             }
+            editor.apply()
         }
 
         return item

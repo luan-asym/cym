@@ -94,12 +94,15 @@ class MainActivity : AppCompatActivity() {
             bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", R.id.call)
         }
 
-        callLogContacts = readCallLog(this)
-//        for (i in callLogContacts.indices) {
-//            Log.i(TAG, callLogContacts.get(i).toString())
-//        }
-
         allContacts = readCallLog(this)
+        var updatedContacts: ArrayList<Contact> = ArrayList()
+        for (contact in allContacts) {
+            var whitelisted = sharedPref.getBoolean(contact.name, false)
+
+            contact.changeWhitelist(whitelisted)
+            updatedContacts.add(contact)
+        }
+        allContacts = updatedContacts
 
 
         // notification stuff
@@ -166,11 +169,6 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-
-
-        // ----- HAMID -----
-        gson = GsonBuilder().create()
-        // ------ END ------
     }
 
     // ----- Settings Fragment -----
@@ -200,7 +198,7 @@ class MainActivity : AppCompatActivity() {
                 val builder = AlertDialog.Builder(activity!!)
                 with(builder) {
                     setTitle("Pick reminder frequency")
-                    setItems(items) { dialog, freq ->
+                    setItems(items) { _, freq ->
                         when (freq) {
                             0 -> editor.putInt("REMINDER_FREQ", 1)
                             1 -> editor.putInt("REMINDER_FREQ", 2)
@@ -378,21 +376,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        // ----- HAMID -----
-        lateinit var gson: Gson
         private lateinit var editor: SharedPreferences.Editor
-        lateinit var callLogContacts: ArrayList<Contact>
-        fun saveAndReturnContactList(key: String): JsonArray {
-            val listJSON = gson.toJson(callLogContacts)
-            Log.d(TAG, "----------------------")
-            Log.d(TAG, callLogContacts.toString())
-            Log.d(TAG, "----------------------")
-            editor.putString(key, listJSON)
-            editor.apply()
-            val parser = JsonParser()
-
-            return parser.parse(listJSON).asJsonArray
-        }
-        // ------ END ------
     }
 }
