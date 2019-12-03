@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 
                 // check to if the last time contacted is greater than remainder time
                 val intended_reminder = contact.last_contacted.plusDays(contact.alert_pref.toLong())
-
+                Log.i(TAG, intended_reminder.toString())
                 if( intended_reminder > LocalDate.now() ) {
                     Log.i(TAG, "SENDING ALERT FOR ${contact.name}")
 
