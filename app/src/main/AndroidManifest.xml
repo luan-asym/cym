@@ -28,6 +28,9 @@
         <activity android:name=".SetupActivity" />
         <activity android:name=".ContactManagerActivity" />
         <activity android:name=".MainActivity" />
+
+        <receiver android:name=".util.AlarmNotificationReceiver" />
+        <receiver android:name=".util.AlarmLoggerReceiver" />
     </application>
 
 </manifest>

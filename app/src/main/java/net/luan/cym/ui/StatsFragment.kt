@@ -76,7 +76,7 @@ class StatsFragment : Fragment() {
         spinnerChart.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
-                Toast.makeText(context!!, chartNames[position], Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context!!, chartNames[position], Toast.LENGTH_SHORT).show()
                 if (chartNames[position]=="Pie") {
                     setupPieChart(contacts)
                     Log.i("In Spinner", "Setting up Pie Chart")

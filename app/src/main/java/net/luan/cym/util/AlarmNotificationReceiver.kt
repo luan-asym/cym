@@ -13,9 +13,8 @@ import android.net.Uri
 import android.util.Log
 import net.luan.cym.MainActivity
 import net.luan.cym.R
-
 import java.text.DateFormat
-import java.util.Date
+import java.util.*
 
 class AlarmNotificationReceiver : BroadcastReceiver() {
 
@@ -29,7 +28,7 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
     private lateinit var mNotificationManager: NotificationManager
 
     // Notification Text Elements
-    private val tickerText = "Are You Playing Angry Birds Again!"
+    private val tickerText = "Call Your Mother notification"
     private val contentTitle = "A Kind Reminder"
     private val contentText = "You need to call someone!!"
 

@@ -95,7 +95,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         allContacts = readCallLog(this)
+        // read contact log, make updated contact list
         var updatedContacts: ArrayList<Contact> = ArrayList()
+        // check for whitelist sharedPref
         for (contact in allContacts) {
             var whitelisted = sharedPref.getBoolean(contact.name, false)
 
@@ -135,12 +137,11 @@ class MainActivity : AppCompatActivity() {
         for (contact in allContacts) {
             Log.i(TAG, "Going through contact ${contact.name}")
 
-            if (!contact.whitelisted) {
+            if (contact.whitelisted) {
                 Log.i(TAG, "${contact.name} IS whitelisted")
 
                 // check to if the last time contacted is greater than remainder time
                 val intended_reminder = contact.last_contacted.plusDays(contact.alert_pref.toLong())
-                Log.i(TAG, intended_reminder.toString())
                 if( intended_reminder < LocalDate.now() ) {
                     Log.i(TAG, "SENDING ALERT FOR ${contact.name}")
 
@@ -160,7 +161,8 @@ class MainActivity : AppCompatActivity() {
 
                     // Show Toast message
                     Toast.makeText(
-                        applicationContext, "Alarm has been send to remind to call contact",
+                        applicationContext, "You need to call ${contact.name}, last time you " +
+                                "called them was ${contact.last_contacted}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
