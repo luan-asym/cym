@@ -70,7 +70,10 @@
         You can change this later in the app settings.
     </string>
     <string name="q4">
-        All set!
+        All set! \n\n
+
+        We will now show you some contacts that we recommend you call.
+        Use the star button to whitelist that contact.
     </string>
     <string name="permission_error">
         ERROR \n\n
