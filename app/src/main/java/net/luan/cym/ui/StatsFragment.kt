@@ -1,6 +1,5 @@
 package net.luan.cym.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,9 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.PieData
@@ -24,14 +20,9 @@ import net.luan.cym.Contact
 import net.luan.cym.MainActivity.Companion.returnContactList
 
 import net.luan.cym.R
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-
 
 // Charts used are found on the following github: https://github.com/PhilJay/MPAndroidChart
-
-
 class StatsFragment : Fragment() {
 
     // This hashMap is of type Float because it's what the PieChart Library requires... this
@@ -164,7 +155,7 @@ class StatsFragment : Fragment() {
         } else {
             Log.i("In SetupBarChart", "Not NULL")
 
-            barchart.setData(data)
+            barchart.data = data
             barchart.setFitBars(true)
 
             // Format the X axis to display the contact names
@@ -172,15 +163,17 @@ class StatsFragment : Fragment() {
             // x axis is really screwed up right now. Commenting out until I can get it working
             //barchart.xAxis.valueFormatter = IndexAxisValueFormatter(axis)
             //barchart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            barchart.axisRight.isEnabled = false
+            barchart.getAxis(YAxis.AxisDependency.LEFT)
             barchart.xAxis.setDrawAxisLine(false)
             barchart.xAxis.setDrawGridLines(false)
             barchart.xAxis.setDrawLabels(false)
             yAxis.setDrawGridLines(false)
             yAxis.setDrawAxisLine(false)
-            yAxis.setDrawLabels(false)
+            yAxis.setDrawLabels(true)
 
             // Set yAxis to be 0 by default to prevent really skewed graphs
-            yAxis.setAxisMinimum(0f)
+            yAxis.axisMinimum = 0f
             barchart.invalidate()
         }
     }

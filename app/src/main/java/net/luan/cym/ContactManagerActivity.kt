@@ -10,7 +10,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import net.luan.cym.MainActivity.Companion.returnContactList
 import net.luan.cym.util.ContactListAdapter
 
-
 class ContactManagerActivity : AppCompatActivity() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor

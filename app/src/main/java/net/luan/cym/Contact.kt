@@ -1,6 +1,5 @@
 package net.luan.cym
 
-import android.util.Log
 import java.time.LocalDate
 
 // Contact class takes in multiple variables
@@ -26,6 +25,7 @@ class Contact (name: String, phone: Long, freq: Int, last_contacted: LocalDate,
     var whitelisted: Boolean = whitelisted
 
     // initializer
+    // uncomment and it will display each contact's info
     init {
         /*
         Log.i(TAG, "Contact created: ${this.name} (${this.phone})" +

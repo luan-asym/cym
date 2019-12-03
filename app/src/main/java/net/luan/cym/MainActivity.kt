@@ -1,9 +1,7 @@
 package net.luan.cym
 
 import android.app.AlarmManager
-import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -17,10 +15,6 @@ import android.util.Log
 import android.widget.*
 import androidx.preference.Preference
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonParser
 import net.luan.cym.ui.StatsFragment
 import java.time.LocalDate
 import java.util.*
@@ -46,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         // UI Components
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
@@ -110,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         }
         allContacts = updatedContacts
 
-
         // notification stuff
         // Create an Intent to broadcast to the AlarmNotificationReceiver
         val mNotificationReceiverIntent = Intent(
@@ -170,7 +162,6 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 Log.i(TAG, "${contact.name} is NOT whitelisted")
-
             }
         }
     }
@@ -191,6 +182,7 @@ class MainActivity : AppCompatActivity() {
                 activity!!.applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
             editor = sharedPref.edit()
 
+            // small if statement for each preference option
             if (preference == findPreference("DEFAULT_TIME")) {
                 // change default time
                 Log.d(TAG, "Changing default time (was ${sharedPref.getInt("REMINDER_FREQ", 0)})")
@@ -221,6 +213,7 @@ class MainActivity : AppCompatActivity() {
                     show()
                 }
             } else if (preference == findPreference("CHANGE_WHITELIST")) {
+                // open call log in whitelist mode
                 Log.d(TAG, "Changing whitelist")
                 editor.putBoolean("WHITELISTING_MODE", true)
                 editor.apply()
@@ -242,12 +235,11 @@ class MainActivity : AppCompatActivity() {
         // changing bottomNav to selected activity
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
-
-
     }
 
 
 
+    // DON'T TOUCH. ANYTHING PAST THIS WILL CRASH
     // no one knows what any of his code does... missing comments
     // ----- HAMID -----
     private fun createMap(): HashMap<String, Int> {
@@ -369,16 +361,10 @@ class MainActivity : AppCompatActivity() {
 
         private val PREF_FILE = "net.luan.cym.prefs"
 
-        // ALARMS AND NOTIFICATION SERVICES
-        private const val MY_NOTIFICATION_ID = 1
-        private const val CHANNEL_ID_STRING = ".channel_01"
-
-
         lateinit var allContacts: ArrayList<Contact>
         fun returnContactList(): ArrayList<Contact> {
             return allContacts
         }
-
 
         private lateinit var editor: SharedPreferences.Editor
     }
