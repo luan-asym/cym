@@ -96,10 +96,13 @@ class MainActivity : AppCompatActivity() {
         var updatedContacts: ArrayList<Contact> = ArrayList()
         // check for whitelist sharedPref
         for (contact in allContacts) {
-            var whitelisted = sharedPref.getBoolean(contact.name, false)
-
-            contact.changeWhitelist(whitelisted)
-            updatedContacts.add(contact)
+            if (contact.name != "") {
+                var whitelisted = sharedPref.getBoolean(contact.name, false)
+                contact.changeWhitelist(whitelisted)
+                updatedContacts.add(contact)
+            } else {
+                // do nothing
+            }
         }
         allContacts = updatedContacts
 
@@ -236,7 +239,6 @@ class MainActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
     }
-
 
 
     // DO NOT TOUCH. ANYTHING PAST THIS WILL CRASH

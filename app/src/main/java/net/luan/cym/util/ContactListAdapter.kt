@@ -11,9 +11,12 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.core.app.ActivityCompat.finishAffinity
 import net.luan.cym.Contact
+import net.luan.cym.MainActivity
 import net.luan.cym.MainActivity.Companion.allContacts
 import net.luan.cym.R
+import kotlin.system.exitProcess
 
 class ContactListAdapter(private val context: Context,
                          private val data: ArrayList<Contact>) : BaseAdapter() {
@@ -71,6 +74,7 @@ class ContactListAdapter(private val context: Context,
             intent.data = Uri.parse("tel:$phone")
             // ignore this...
             context.startActivity(intent)
+            exitProcess(-1)
         }
 
         // whitelist onClickListener
