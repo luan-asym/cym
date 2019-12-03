@@ -39,7 +39,9 @@ class SetupActivity : AppCompatActivity() {
         progress.progress = 0
         progressNext(progress.progress, prompt)
         next.setOnClickListener {
-            progress.progress += 33
+            val curr_progress = progress.progress
+            val new_progress = curr_progress + 33
+            progress.setProgress(new_progress, true)
             progressNext(progress.progress, prompt)
         }
 
