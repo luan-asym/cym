@@ -31,7 +31,7 @@ class AlarmNotificationReceiver : BroadcastReceiver() {
     // Notification Text Elements
     private val tickerText = "Are You Playing Angry Birds Again!"
     private val contentTitle = "A Kind Reminder"
-    private val contentText = "Get back to studying!!"
+    private val contentText = "You need to call someone!!"
 
     // Notification Sound and Vibration on Arrival
     private val mVibratePattern = longArrayOf(0, 200, 200, 300)

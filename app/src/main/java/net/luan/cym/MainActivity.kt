@@ -128,11 +128,18 @@ class MainActivity : AppCompatActivity() {
 
         // go through contact list and look for white listed contacts
         for (contact in allContacts) {
+            Log.i(TAG, "Going through contact ${contact.name}")
+
             if (contact.whitelisted) {
+                Log.i(TAG, "${contact.name} IS whitelisted")
+
+
                 // check to if the last time contacted is greater than remainder time
                 val intended_reminder = contact.last_contacted.plusDays(contact.alert_pref.toLong())
 
                 if( intended_reminder > LocalDate.now() ) {
+                    Log.i(TAG, "SENDING ALERT FOR ${contact.name}")
+
                     // if intended reminder is greater than the current LocalDate, send a reminder
                     mAlarmManager.set(
                         AlarmManager.RTC_WAKEUP,
@@ -153,6 +160,9 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
+            } else {
+                Log.i(TAG, "${contact.name} is NOT whitelisted")
+
             }
         }
 
