@@ -66,48 +66,8 @@ class ContactManagerActivity : AppCompatActivity() {
             true
         }
 
-        // missing comment from hamid
-        gson = GsonBuilder().create()
-
-
-//        // read in contact list
-//        val rawContacts = saveAndReturnContactList("Contacts")
-//        val contactList = ArrayList<Contact>()
-//
-//
-//        for (i in 0 until rawContacts.size()) {
-//            var contact = gson.fromJson(rawContacts.get(i), Contact::class.java)
-//            var name = contact.name.toString()
-//            var last_contacted = contact.last_contacted
-//            var whitelist = contact.whitelisted
-//            Log.d(TAG, "$name (last contacted: $last_contacted) || $whitelist")
-//
-//            lastContactedMap.put(name, last_contacted.toString())
-//            whitelistMap.put(name, whitelist)
-//
-//            var processedContact = Contact(name, 0, 0, last_contacted, 7, whitelist)
-//
-//            contactList.add(processedContact)
-//        }
-
-        // read in contact list
-        val rawContacts = returnContactList()
-        val contactList = ArrayList<Contact>()
-
-        for (i in 0 until rawContacts.size) {
-            var contact = rawContacts.get(i)
-            var name = contact.name
-            var last_contacted = contact.last_contacted
-            var whitelist = contact.whitelisted
-
-            Log.d(TAG, "$name (last contacted: $last_contacted) || $whitelist")
-            var processedContact = Contact(name, 0, 0, last_contacted, 7, whitelist)
-
-            contactList.add(processedContact)
-        }
-
         // attaching adapter to display custom listview
-        val adapter = ContactListAdapter(this, contactList)
+        val adapter = ContactListAdapter(this, returnContactList())
         listView.adapter = adapter
     }
 
