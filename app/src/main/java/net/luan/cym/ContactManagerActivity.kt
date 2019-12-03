@@ -46,7 +46,11 @@ class ContactManagerActivity : AppCompatActivity() {
                     finish()
                 }
                 R.id.call -> {
-                    // do nothing
+                    // refresh list
+                    editor.putBoolean("WHITELISTING_MODE", false)
+                    editor.apply()
+                    finish()
+                    startActivity(intent)
                 }
                 R.id.settings -> {
                     Log.d(TAG, "Contact Manager selected: settings")
