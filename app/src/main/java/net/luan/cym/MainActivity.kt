@@ -83,6 +83,9 @@ class MainActivity : AppCompatActivity() {
 //            Log.i(TAG, callLogContacts.get(i).toString())
 //        }
 
+        var allContacts = readCallLog(this)
+
+
         // ----- HAMID -----
         gson = GsonBuilder().create()
         // ------ END ------
@@ -227,15 +230,23 @@ class MainActivity : AppCompatActivity() {
 
         private val PREF_FILE = "net.luan.cym.prefs"
 
+        fun returnContactList(): ArrayList<Contact> {
+            return callLogContacts
+        }
+
         // ----- HAMID -----
         lateinit var gson: Gson
         private lateinit var editor: SharedPreferences.Editor
         lateinit var callLogContacts: ArrayList<Contact>
         fun saveAndReturnContactList(key: String): JsonArray {
             val listJSON = gson.toJson(callLogContacts)
-            editor.putString(key, listJSON).commit()
+            Log.d(TAG, "----------------------")
+            Log.d(TAG, callLogContacts.toString())
+            Log.d(TAG, "----------------------")
+            editor.putString(key, listJSON)
             editor.apply()
             val parser = JsonParser()
+
             return parser.parse(listJSON).asJsonArray
         }
         // ------ END ------

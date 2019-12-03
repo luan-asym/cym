@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.GsonBuilder
 import net.luan.cym.MainActivity.Companion.gson
+import net.luan.cym.MainActivity.Companion.returnContactList
 import net.luan.cym.MainActivity.Companion.saveAndReturnContactList
 import net.luan.cym.util.ContactListAdapter
 import java.time.LocalDate
@@ -69,20 +70,37 @@ class ContactManagerActivity : AppCompatActivity() {
         gson = GsonBuilder().create()
 
 
+//        // read in contact list
+//        val rawContacts = saveAndReturnContactList("Contacts")
+//        val contactList = ArrayList<Contact>()
+//
+//
+//        for (i in 0 until rawContacts.size()) {
+//            var contact = gson.fromJson(rawContacts.get(i), Contact::class.java)
+//            var name = contact.name.toString()
+//            var last_contacted = contact.last_contacted
+//            var whitelist = contact.whitelisted
+//            Log.d(TAG, "$name (last contacted: $last_contacted) || $whitelist")
+//
+//            lastContactedMap.put(name, last_contacted.toString())
+//            whitelistMap.put(name, whitelist)
+//
+//            var processedContact = Contact(name, 0, 0, last_contacted, 7, whitelist)
+//
+//            contactList.add(processedContact)
+//        }
+
         // read in contact list
-        val rawContacts = saveAndReturnContactList("Contacts")
+        val rawContacts = returnContactList()
         val contactList = ArrayList<Contact>()
 
-        for (i in 0 until rawContacts.size()) {
-            var contact = gson.fromJson(rawContacts.get(i), Contact::class.java)
-            var name = contact.name.toString()
+        for (i in 0 until rawContacts.size) {
+            var contact = rawContacts.get(i)
+            var name = contact.name
             var last_contacted = contact.last_contacted
             var whitelist = contact.whitelisted
+
             Log.d(TAG, "$name (last contacted: $last_contacted) || $whitelist")
-
-            lastContactedMap.put(name, last_contacted.toString())
-            whitelistMap.put(name, whitelist)
-
             var processedContact = Contact(name, 0, 0, last_contacted, 7, whitelist)
 
             contactList.add(processedContact)
