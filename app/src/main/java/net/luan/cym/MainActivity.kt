@@ -104,6 +104,7 @@ class MainActivity : AppCompatActivity() {
 
         // notification stuff
 
+
         // Create an Intent to broadcast to the AlarmNotificationReceiver
         val mNotificationReceiverIntent = Intent(
             this@MainActivity,
@@ -130,7 +131,7 @@ class MainActivity : AppCompatActivity() {
         for (contact in allContacts) {
             Log.i(TAG, "Going through contact ${contact.name}")
 
-            if (contact.whitelisted) {
+            if (!contact.whitelisted) {
                 Log.i(TAG, "${contact.name} IS whitelisted")
 
 
@@ -165,6 +166,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+
 
         // ----- HAMID -----
         gson = GsonBuilder().create()
@@ -238,6 +240,8 @@ class MainActivity : AppCompatActivity() {
         // changing bottomNav to selected activity
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
+
+
     }
 
 
