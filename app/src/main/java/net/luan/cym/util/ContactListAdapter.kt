@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import kotlinx.android.synthetic.main.contact_item.view.*
 import net.luan.cym.Contact
 import net.luan.cym.R
 
@@ -37,7 +38,17 @@ class ContactListAdapter(private val context: Context,
         val contact = getItem(pos) as Contact
         nameView.text = contact.name
         lastContactedView.text = "Last contacted: ${contact.last_contacted.toString()}"
-        whitelistView.isChecked = contact.whitelisted
+        contact.whitelisted = whitelistView.isChecked
+
+        whitelistView.setOnClickListener {
+            contact.whitelisted = whitelistView.isChecked
+
+            if (contact.whitelisted) {
+                whitelistView.setButtonDrawable(R.drawable.ic_checked)
+            } else {
+                whitelistView.setButtonDrawable(R.drawable.ic_star)
+            }
+        }
 
         return item
     }
