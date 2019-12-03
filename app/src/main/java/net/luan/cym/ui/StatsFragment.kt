@@ -24,6 +24,7 @@ import net.luan.cym.Contact
 import net.luan.cym.MainActivity.Companion.callLogContacts
 import net.luan.cym.MainActivity.Companion.gson
 import net.luan.cym.MainActivity.Companion.saveAndReturnContactList
+import net.luan.cym.MainActivity.Companion.returnContactList
 
 import net.luan.cym.R
 import com.github.mikephil.charting.components.XAxis
@@ -39,9 +40,7 @@ class StatsFragment : Fragment() {
     // This hashMap is of type Float because it's what the PieChart Library requires... this
     // MIGHT cause issues when we get all the call log data as I assume those will be ints.
     // We definitely will want to figure that out and prevent type issues
-    val names: MutableList<String> = ArrayList()
-    val freq: MutableList<Float> = ArrayList()
-    val whiteList: MutableList<Boolean> = ArrayList()
+    var contacts: ArrayList<Contact> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,21 +57,10 @@ class StatsFragment : Fragment() {
     // it is apparently not type-safe to do all your work in there.
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        // ---- Hamid -----
-        super.onActivityCreated(savedInstanceState)
-        val temp = saveAndReturnContactList("Contacts")
-        var i = 0
-        var contact: Contact
 
-        // Populate the arrays for statistics
-        while (i < temp.size() && i < callLogContacts.size) {
-            contact =  gson.fromJson(temp.get(i), Contact::class.java)
-            Log.i(TAG, contact.toString())
-            names.add(contact.name)
-            freq.add(contact.freq.toFloat())
-            whiteList.add(contact.whitelisted)
-            i++
-        }
+        super.onActivityCreated(savedInstanceState)
+        contacts = returnContactList()
+
 
         // -----  END ------
 
@@ -93,7 +81,7 @@ class StatsFragment : Fragment() {
 
                 Toast.makeText(context!!, chartNames[position], Toast.LENGTH_SHORT).show()
                 if (chartNames[position]=="Pie") {
-                    setupPieChart(names, freq, whiteList)
+                    setupPieChart(contacts)
                     Log.i("In Spinner", "Setting up Pie Chart")
                     // Set the pichart visible and the barchart to invisible
                     piechart.visibility = View.VISIBLE
@@ -102,7 +90,7 @@ class StatsFragment : Fragment() {
                     Log.i("In spinner selector", "Bar was chosen")
                     piechart.visibility = View.INVISIBLE
                     barchart.visibility = View.VISIBLE
-                   setupBarChart(names, freq, whiteList)
+                   setupBarChart(contacts)
                 }
             }
 
@@ -117,15 +105,15 @@ class StatsFragment : Fragment() {
     // https://www.youtube.com/watch?v=iS7EgKnyDeY <-- This video was how I learned to do this
     // I suggest you watch it if you want to learn more about the setup and all
 
-    private fun setupPieChart(name: MutableList<String>, freq: MutableList<Float>, wl: MutableList<Boolean>) {
+    private fun setupPieChart(contacts: ArrayList<Contact>) {
         val pieEntries = arrayListOf<PieEntry>()
 
         // PieCharts with this library require data entries with the following typing (float, string)
         // for each element in the arrays add the frequency of contact (Value) and the name (Contact)
         // to pieEntries ONLY if the contact is whitelisted
-        for (i in 0 until name.size) {
-            if (wl[i]) {
-                pieEntries.add(PieEntry(freq[i], name[i]))
+        for (contact in contacts) {
+            if (contact.whitelisted) {
+                pieEntries.add(PieEntry(contact.freq.toFloat(), contact.name))
             }
         }
 
@@ -153,25 +141,28 @@ class StatsFragment : Fragment() {
     // TODO: Figure out how to do this stupid bar chart. What the heck is this crap
     // TODO: https://github.com/PhilJay/MPAndroidChart/wiki/Setting-Data <-- Use this link
 
-    private fun setupBarChart(name: MutableList<String>, freq: MutableList<Float>, wl: MutableList<Boolean>) {
+    private fun setupBarChart(contacts: ArrayList<Contact>) {
         val barEntry = arrayListOf<BarEntry>();
         val axis = arrayListOf<String>()
         var count : Float = 0f
         // Grab the yAxis for formatting later on
         var yAxis = barchart.getAxisLeft();
+        barchart.description.isEnabled = false
 
 
         // BarCharts with this library require data entries with the following typing (float, float)
         // for each contact in the arrays add the position for the barchart (count) and the times contacted (value)
         // to barEntries ONLY if the contact is whitelisted
-        for (i in 0 until name.size) {
-            if (wl[i]) {
-                barEntry.add(BarEntry(count++, freq[i]))
+        for (contact in contacts) {
+            if (contact.whitelisted) {
+                barEntry.add(BarEntry(count++, contact.freq.toFloat()))
                 // add x-axis data
-                axis.add(name[i])
+                axis.add(contact.name)
             }
         }
 
+        Log.d(TAG, axis.toString())
+        Log.d(TAG, count.toString())
 
         // Initalize the barchart dataset
         val dataSet = BarDataSet(barEntry, "BarDataSet")
@@ -184,15 +175,25 @@ class StatsFragment : Fragment() {
 
 
         if (barchart == null) {
+
             Log.i("In SetupBarChart", "NULL")
+
         } else {
             Log.i("In SetupBarChart", "Not NULL")
+
             barchart.setData(data)
             barchart.setFitBars(true)
+
             // Format the X axis to display the contact names
             // Discovered from the following StackOverflow: https://stackoverflow.com/questions/47637653/how-to-set-x-axis-labels-in-mp-android-chart-bar-graph
-            barchart.xAxis.valueFormatter = IndexAxisValueFormatter(axis)
-            barchart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            // x axis is really screwed up right now. Commenting out until I can get it working
+            //barchart.xAxis.valueFormatter = IndexAxisValueFormatter(axis)
+            //barchart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            barchart.xAxis.setDrawAxisLine(false)
+            barchart.xAxis.setDrawGridLines(false)
+            yAxis.setDrawGridLines(false)
+            yAxis.setDrawAxisLine(false)
+
             // Set yAxis to be 0 by default to prevent really skewed graphs
             yAxis.setAxisMinimum(0f)
             barchart.invalidate()
