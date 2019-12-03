@@ -1,7 +1,9 @@
 package net.luan.cym.util
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -60,6 +62,15 @@ class ContactListAdapter(private val context: Context,
             editor.putBoolean(contact.name, false)
         }
         editor.apply()
+
+        // name onClickListener to call person
+        nameView.setOnClickListener {
+            val phone = contact.phone
+
+            var intent = Intent(Intent.ACTION_CALL)
+            intent.data = Uri.parse("tel:$phone")
+            context.startActivity(intent)
+        }
 
         // whitelist onClickListener
         whitelistView.setOnClickListener {
