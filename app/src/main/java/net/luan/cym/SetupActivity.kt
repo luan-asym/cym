@@ -76,7 +76,7 @@ class SetupActivity : AppCompatActivity() {
                 val builder = AlertDialog.Builder(this)
                 with (builder) {
                     setTitle("Pick reminder frequency")
-                    setItems(items) { dialog, freq ->
+                    setItems(items) { _, freq ->
                         Log.d(TAG, "Frequency picked: $freq")
 
                         when (freq) {
