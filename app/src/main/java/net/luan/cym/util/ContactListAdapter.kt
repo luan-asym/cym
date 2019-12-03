@@ -67,8 +67,9 @@ class ContactListAdapter(private val context: Context,
         nameView.setOnClickListener {
             val phone = contact.phone
 
-            var intent = Intent(Intent.ACTION_CALL)
+            val intent = Intent(Intent.ACTION_CALL)
             intent.data = Uri.parse("tel:$phone")
+            // ignore this...
             context.startActivity(intent)
         }
 
