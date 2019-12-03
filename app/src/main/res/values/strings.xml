@@ -2,7 +2,7 @@
     <!-- App Labels -->
     <string name="app_name">Call Your Mother</string>
     <string name="luan">UI Design, Splash Screen, Setup Screen, Call List, Settings</string>
-    <string name="colin">Statistics Fragment, External Library Integration, Notifications</string>
+    <string name="colin">Statistics Fragment, External Library Integration, Notifications, Demo Video</string>
     <string name="hamid">read in contacts</string>
 
     <!-- First-time Setup -->
