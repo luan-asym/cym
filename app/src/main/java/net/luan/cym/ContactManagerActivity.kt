@@ -64,7 +64,7 @@ class ContactManagerActivity : AppCompatActivity() {
 
         // if it is in WHITELISTING_MODE, it will show all contacts
         // else, it will only show whitelisted contacts
-        if (!MODE) {
+        if (MODE) {
             newList = returnContactList()
         } else {
             var rawContacts = returnContactList()
@@ -89,7 +89,7 @@ class ContactManagerActivity : AppCompatActivity() {
 
         // if it is in WHITELISTING_MODE, it will show all contacts
         // else, it will only show whitelisted contacts
-        if (!MODE) {
+        if (MODE) {
             newList = returnContactList()
         } else {
             var rawContacts = returnContactList()

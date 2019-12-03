@@ -140,8 +140,15 @@ class MainActivity : AppCompatActivity() {
                     }
                     show()
                 }
+            } else if (preference == findPreference("CHANGE_WHITELIST")) {
+                Log.d(TAG, "Changing whitelist")
+                editor.putBoolean("WHITELISTING_MODE", true)
+                editor.apply()
+
+                val intent = Intent(context, ContactManagerActivity::class.java)
+                startActivity(intent)
             } else if (preference == findPreference("")) {
-                super.onPreferenceTreeClick(preference)
+                Log.w(TAG, "ERROR IN PREFERENCE SELECTION")
             }
 
             return true
