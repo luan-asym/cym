@@ -43,7 +43,6 @@ class ContactManagerActivity : AppCompatActivity() {
         Log.d(TAG, "--------------------------")
 
         // bottom bar navigation to MainActivity
-        bottomNav.selectedItemId = R.id.call
         bottomNav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.stats -> {

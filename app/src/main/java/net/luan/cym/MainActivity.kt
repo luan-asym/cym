@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         // default page is call page
-        bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", R.id.call)
         if (savedInstanceState == null) {
             bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", R.id.call)
         }

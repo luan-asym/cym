@@ -44,7 +44,7 @@ class SetupActivity : AppCompatActivity() {
         }
 
         editor.putBoolean("FIRST", false)
-        editor.commit()
+        editor.apply()
     }
 
     // --- Progress bar handling ---
@@ -85,10 +85,13 @@ class SetupActivity : AppCompatActivity() {
                             2 -> editor.putInt("REMINDER_FREQ", 7)
                             3 -> editor.putInt("REMINDER_FREQ", 14)
                             4 -> editor.putInt("REMINDER_FREQ", 30)
-                            else -> Log.d(TAG, "FREQUENCY PICKER ERROR")
+                            else -> {
+                                Log.d(TAG, "FREQUENCY PICKER ERROR: Auto selecting 7 days")
+                                editor.putInt("REMINDER_FREQ", 7)
+                            }
                         }
 
-                        editor.commit()
+                        editor.apply()
                     }
                     show()
                 }
