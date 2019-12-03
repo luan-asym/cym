@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    // DON'T TOUCH. ANYTHING PAST THIS WILL CRASH
+    // DO NOT TOUCH. ANYTHING PAST THIS WILL CRASH
     // no one knows what any of his code does... missing comments
     // ----- HAMID -----
     private fun createMap(): HashMap<String, Int> {
