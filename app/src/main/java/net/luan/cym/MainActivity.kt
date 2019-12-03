@@ -60,9 +60,12 @@ class MainActivity : AppCompatActivity() {
                     title.text = resources.getString(R.string.statistics)
                 }
                 R.id.call -> {
+                    editor.putBoolean("WHITELISTING_MODE", false)
+                    editor.apply()
+                    bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
+
                     val intent = Intent(this, ContactManagerActivity::class.java)
                     startActivity(intent)
-                    bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
                 }
                 R.id.settings -> {
                     supportFragmentManager.beginTransaction().replace(R.id.main_frame, SettingsFragment())
@@ -83,8 +86,7 @@ class MainActivity : AppCompatActivity() {
 //            Log.i(TAG, callLogContacts.get(i).toString())
 //        }
 
-        var allContacts = readCallLog(this)
-
+        allContacts = readCallLog(this)
 
         // ----- HAMID -----
         gson = GsonBuilder().create()
@@ -111,9 +113,10 @@ class MainActivity : AppCompatActivity() {
         bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
     }
 
-    // ----- HAMID -----
-    // no one knows what any of his code does... missing comments
 
+
+    // no one knows what any of his code does... missing comments
+    // ----- HAMID -----
     private fun createMap(): HashMap<String, Int> {
         monthMap = HashMap()
         monthMap[getString(R.string.Jan)] = 1; monthMap[getString(R.string.Feb)] = 2; monthMap[getString(R.string.Mar)] = 3
@@ -160,7 +163,8 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     //Node: the default alert_pref is set to 7
-                    val contact = Contact(name, phoneNumber, 1, lastContacted, 7, false)
+                    val alert_pref = sharedPref.getInt("REMINDER_FREQ", 7)
+                    val contact = Contact(name, phoneNumber, 1, lastContacted, alert_pref, false)
 
                     //if we've seen this contact before
                     if (contactNameToIndex[name] != null) {
@@ -230,8 +234,9 @@ class MainActivity : AppCompatActivity() {
 
         private val PREF_FILE = "net.luan.cym.prefs"
 
+        lateinit var allContacts: ArrayList<Contact>
         fun returnContactList(): ArrayList<Contact> {
-            return callLogContacts
+            return allContacts
         }
 
         // ----- HAMID -----

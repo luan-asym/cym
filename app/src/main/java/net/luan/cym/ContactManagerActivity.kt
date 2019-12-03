@@ -7,12 +7,8 @@ import android.util.Log
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.GsonBuilder
-import net.luan.cym.MainActivity.Companion.gson
 import net.luan.cym.MainActivity.Companion.returnContactList
-import net.luan.cym.MainActivity.Companion.saveAndReturnContactList
 import net.luan.cym.util.ContactListAdapter
-import java.time.LocalDate
 
 
 class ContactManagerActivity : AppCompatActivity() {
@@ -20,9 +16,6 @@ class ContactManagerActivity : AppCompatActivity() {
     private lateinit var editor: SharedPreferences.Editor
 
     private lateinit var listView: ListView
-
-    private var whitelistMap: HashMap<String, Boolean> = HashMap()
-    private var lastContactedMap: HashMap<String, String> = HashMap()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +59,50 @@ class ContactManagerActivity : AppCompatActivity() {
             true
         }
 
+        val MODE = sharedPref.getBoolean("WHITELISTING_MODE", true)
+        var newList: ArrayList<Contact> = ArrayList()
+
+        // if it is in WHITELISTING_MODE, it will show all contacts
+        // else, it will only show whitelisted contacts
+        if (!MODE) {
+            newList = returnContactList()
+        } else {
+            var rawContacts = returnContactList()
+
+            for (contact in rawContacts) {
+                if (contact.whitelisted) {
+                    newList.add(contact)
+                }
+            }
+        }
+
         // attaching adapter to display custom listview
-        val adapter = ContactListAdapter(this, returnContactList())
+        val adapter = ContactListAdapter(this, newList)
+        listView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val MODE = sharedPref.getBoolean("WHITELISTING_MODE", true)
+        var newList: ArrayList<Contact> = ArrayList()
+
+        // if it is in WHITELISTING_MODE, it will show all contacts
+        // else, it will only show whitelisted contacts
+        if (!MODE) {
+            newList = returnContactList()
+        } else {
+            var rawContacts = returnContactList()
+
+            for (contact in rawContacts) {
+                if (contact.whitelisted) {
+                    newList.add(contact)
+                }
+            }
+        }
+
+        // attaching adapter to display custom listview
+        val adapter = ContactListAdapter(this, newList)
         listView.adapter = adapter
     }
 

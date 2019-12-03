@@ -35,6 +35,10 @@ class Contact (name: String, phone: Long, freq: Int, last_contacted: LocalDate,
          */
     }
 
+    fun changeWhitelist(checked: Boolean) {
+        this.whitelisted = checked
+    }
+
     override fun toString(): String {
         // last_contacted should produce in this format: YYYY-MM-DD (e.g. 2020-01-01)
         return "${this.name} (${this.phone}) has been contacted ${this.freq} times." +
