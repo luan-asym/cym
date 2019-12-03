@@ -3,35 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        app:key="notification_category"
-        app:title="Notifications"
+        app:key="defaults_category"
+        app:title="Change Defaults"
         >
 
-        <SwitchPreference
-            app:key="allow_push"
-            app:title="Allow Push Notifications"
-            app:summary="Turn on or off Push Notifications"
+        <DropDownPreference
+            app:key="CHANGE_WHITELIST"
+            app:title="@string/change_whitelist"
+            app:summary="Change whitelisted contacts"
             />
 
         <DropDownPreference
-            app:key="default_time"
-            app:title="Default Notification Time"
-            app:summary="Set your default notification time"
+            app:key="DEFAULT_TIME"
+            app:title="@string/reminder_time"
+            app:summary="Set your default reminder time"
             />
     </PreferenceCategory>
 
-
-    <PreferenceCategory
-        app:key="help_category"
-        app:title="Help"
-        >
-
-        <Preference
-            app:key="feedback"
-            app:title="Send Feedback"
-            app:summary="Send technical issues and feedback"
-            />
-    </PreferenceCategory>
 
     <PreferenceCategory
         app:key="about_category"
@@ -41,24 +29,25 @@
         <Preference
             app:key="about_luan"
             app:title="Luan Tran"
-            app:summary="UI Design, Splash Screen, Settings"
+            app:summary="@string/luan"
             />
 
         <Preference
             app:key="about_colin"
             app:title="Colin Huemmer"
-            app:summary="Statistics, Call List, Notifications"
+            app:summary="@string/colin"
             />
 
         <Preference
             app:key="about_hamid"
             app:title="Hamid Aina"
-            app:summary="Reading in Contacts"
+            app:summary="@string/hamid"
             />
 
         <Preference
-            app:key="more_credits"
-            app:title="More Credits"
+            app:key="feedback"
+            app:title="Send Feedback"
+            app:summary="Send technical issues and feedback"
             />
     </PreferenceCategory>
 

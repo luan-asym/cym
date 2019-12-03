@@ -11,6 +11,7 @@ import android.provider.CallLog
 import android.provider.ContactsContract
 import android.util.Log
 import android.widget.*
+import androidx.preference.Preference
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -19,6 +20,7 @@ import com.google.gson.JsonParser
 import net.luan.cym.ui.StatsFragment
 import java.time.LocalDate
 import java.util.*
+import androidx.appcompat.app.AlertDialog
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -95,13 +97,55 @@ class MainActivity : AppCompatActivity() {
 
     // ----- Settings Fragment -----
     class SettingsFragment : PreferenceFragmentCompat() {
+        private lateinit var sharedPref: SharedPreferences
+        private lateinit var editor: SharedPreferences.Editor
+
+        // load preference xml
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.preferences)
         }
-        // HOW TO DO SETTINGS
-        // val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        // val allowPush = sharedPreferences.getBoolean("allow_push", false)
-        // val defaultTime = sharedPreferences.getInt("default_time", 14)
+
+        // preference screen onClickListener
+        override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+            sharedPref =
+                activity!!.applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
+            editor = sharedPref.edit()
+
+            if (preference == findPreference("DEFAULT_TIME")) {
+                // change default time
+                Log.d(TAG, "Changing default time (was ${sharedPref.getInt("REMINDER_FREQ", 0)})")
+
+                val items = arrayOf(
+                    "Everyday", "Every other day", "Weekly",
+                    "Bi-Weekly", "Monthly"
+                )
+                val builder = AlertDialog.Builder(activity!!)
+                with(builder) {
+                    setTitle("Pick reminder frequency")
+                    setItems(items) { dialog, freq ->
+                        when (freq) {
+                            0 -> editor.putInt("REMINDER_FREQ", 1)
+                            1 -> editor.putInt("REMINDER_FREQ", 2)
+                            2 -> editor.putInt("REMINDER_FREQ", 7)
+                            3 -> editor.putInt("REMINDER_FREQ", 14)
+                            4 -> editor.putInt("REMINDER_FREQ", 30)
+                            else -> {
+                                Log.d(TAG, "FREQUENCY PICKER ERROR: Auto selecting 7 days")
+                                editor.putInt("REMINDER_FREQ", 7)
+                            }
+                        }
+
+                        editor.apply()
+                        Log.d(TAG, "\t${sharedPref.getInt("REMINDER_FREQ", 0)}")
+                    }
+                    show()
+                }
+            } else if (preference == findPreference("")) {
+                super.onPreferenceTreeClick(preference)
+            }
+
+            return true
+        }
     }
 
     override fun onResume() {

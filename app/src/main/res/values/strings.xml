@@ -1,9 +1,9 @@
 <resources>
     <!-- App Labels -->
     <string name="app_name">Call Your Mother</string>
-    <string name="colin">Colin</string>
-    <string name="luan">Luan</string>
-    <string name="hamid">null</string>
+    <string name="luan">UI Design, Splash Screen, Setup Screen, Call List, Settings</string>
+    <string name="colin">Statistics Fragment, External Library Integration, Notifications</string>
+    <string name="hamid">read in contacts</string>
 
     <!-- First-time Setup -->
     <string name="welcome">Welcome</string>
@@ -27,6 +27,8 @@
     <!-- Settings Screen -->
     <string name="settings">Settings</string>
     <string name="notifications">Notifications</string>
+    <string name="reminder_time">Default Notification Time</string>
+    <string name="change_whitelist">Whitelist</string>
 
     <!-- For Hamid's HashMap -->
     <string name="Feb">Feb</string>
