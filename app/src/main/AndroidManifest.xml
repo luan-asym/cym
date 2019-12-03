@@ -25,8 +25,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity" />
         <activity android:name=".SetupActivity" />
+        <activity android:name=".ContactManagerActivity" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

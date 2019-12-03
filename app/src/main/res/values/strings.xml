@@ -10,7 +10,6 @@
     <string name="splash">Splash Screen</string>
     <string name="setup">Setup</string>
     <string name="next">Next</string>
-    <string name="skip">Skip</string>
 
     <!-- Home/Stats Screen -->
     <string name="home">Home</string>
@@ -23,18 +22,13 @@
     <string name="name">Name</string>
     <string name="phone_number">Phone Number</string>
     <string name="phone">Phone</string>
+    <string name="contact_manager">Contact Manager</string>
 
     <!-- Settings Screen -->
     <string name="settings">Settings</string>
     <string name="notifications">Notifications</string>
 
-    <!-- Notification Constants -->
-    <!-- these are untranslatable or they will break -->
-    <string name="notification_channel_id" translatable="false">cym_channel</string>
-    <string name="notification_channel_name" translatable="false">Call Your Mother</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- For Hamid's HashMap -->
     <string name="Feb">Feb</string>
     <string name="Jan">Jan</string>
     <string name="Mar">Mar</string>
@@ -75,6 +69,12 @@
     </string>
     <string name="q4">
         All set!
+    </string>
+    <string name="permission_error">
+        ERROR \n\n
+
+        Please allow permissions in the app settings.
+        Otherwise, the app will not work properly.
     </string>
 
 </resources>

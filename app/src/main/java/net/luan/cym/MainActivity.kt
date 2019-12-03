@@ -1,11 +1,8 @@
 package net.luan.cym
 
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
@@ -19,7 +16,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
-import net.luan.cym.ui.CallFragment
 import net.luan.cym.ui.StatsFragment
 import java.time.LocalDate
 import java.util.*
@@ -27,10 +23,9 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var sharedPref: SharedPreferences
 
     private lateinit var statsFragment: StatsFragment
-    private lateinit var callFragment: CallFragment
-    private lateinit var sharedPref: SharedPreferences
 
     private lateinit var monthMap: HashMap<String, Int>
     private var phoneNumberToName =  HashMap<String, String>()
@@ -46,25 +41,14 @@ class MainActivity : AppCompatActivity() {
 
         // SharedPreference handler
         sharedPref = applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
-        val freq = sharedPref.getInt("REMINDER_FREQ", 0)
         editor = sharedPref.edit()
+        Log.d(TAG, "----- Main Activity -----")
         Log.d(TAG, "--- SHARED PREFERENCES ---")
+        Log.d(TAG, "MODE: \t${sharedPref.getBoolean("WHITELISTING_MODE", false)}")
         Log.d(TAG, "FIRST: \t${sharedPref.getBoolean("FIRST", true)}")
-        Log.d(TAG, "FREQ: \t$freq")
+        Log.d(TAG, "FREQ: \t${sharedPref.getInt("REMINDER_FREQ", 0)}")
+        Log.d(TAG, "FRAGMENT: ${sharedPref.getInt("FRAGMENT", 0)}")
         Log.d(TAG, "--------------------------")
-
-        // create a notification channel to send notifications
-        Log.d(TAG, "Attempting to create channel...")
-        createChannel(getString(R.string.notification_channel_id), getString(R.string.notification_channel_name))
-
-        // used for notifications
-        // val notificationManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        // val notificationIntent = Intent(this, NotificationReceiver::class.java)
-
-        // default page is call page
-        if (savedInstanceState == null) {
-            bottomNav.selectedItemId = intent.getIntExtra("FRAGMENT", R.id.stats)
-        }
 
         // changes the fragment to the currently selected item
         bottomNav.setOnNavigationItemSelectedListener { item ->
@@ -75,33 +59,59 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                     title.text = resources.getString(R.string.statistics)
                 }
-
                 R.id.call -> {
-                    callFragment = CallFragment()
-                    supportFragmentManager.beginTransaction().replace(R.id.main_frame, callFragment)
-                        .commit()
-                    title.text = resources.getString(R.string.call_list)
+                    val intent = Intent(this, ContactManagerActivity::class.java)
+                    startActivity(intent)
+                    bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
                 }
-
                 R.id.settings -> {
                     supportFragmentManager.beginTransaction().replace(R.id.main_frame, SettingsFragment())
                         .commit()
                     title.text = resources.getString(R.string.settings)
                 }
             }
-
             true
         }
 
-        callLogContacts = readCallLog(this)
-        /*for (i in callLogContacts.indices) {
-            Log.i(TAG, callLogContacts.get(i).toString())
-        }*/
+        // default page is call page
+        bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", R.id.call)
+        if (savedInstanceState == null) {
+            bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", R.id.call)
+        }
 
+        callLogContacts = readCallLog(this)
+//        for (i in callLogContacts.indices) {
+//            Log.i(TAG, callLogContacts.get(i).toString())
+//        }
+
+        // ----- HAMID -----
         gson = GsonBuilder().create()
+        // ------ END ------
     }
 
-    //map to obtain the integer value for a given month
+    // ----- Settings Fragment -----
+    class SettingsFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            addPreferencesFromResource(R.xml.preferences)
+        }
+        // HOW TO DO SETTINGS
+        // val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        // val allowPush = sharedPreferences.getBoolean("allow_push", false)
+        // val defaultTime = sharedPreferences.getInt("default_time", 14)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d(TAG, "--- MainActivity.onResume() ---")
+        // changing bottomNav to selected activity
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.selectedItemId = sharedPref.getInt("FRAGMENT", 0)
+    }
+
+    // ----- HAMID -----
+    // no one knows what any of his code does... missing comments
+
     private fun createMap(): HashMap<String, Int> {
         monthMap = HashMap()
         monthMap[getString(R.string.Jan)] = 1; monthMap[getString(R.string.Feb)] = 2; monthMap[getString(R.string.Mar)] = 3
@@ -141,8 +151,7 @@ class MainActivity : AppCompatActivity() {
 
                     if (phoneNumberToName[phoneNumber.toString()] == null) {
                         name = getContactName(phoneNumber.toString(), context)
-                    }
-                    else if (callerNameUriFormat == null) {
+                    } else if (callerNameUriFormat == null) {
                         name = phoneNumberToName[phoneNumber.toString()]!!
                     } else {
                         name = getNameFromUriFormat(callerNameUriFormat)
@@ -169,7 +178,7 @@ class MainActivity : AppCompatActivity() {
             }
             cursor.close()
         } catch (e : SecurityException) {
-            Log.d(TAG, e.toString())
+            Log.w(TAG, e.toString())
         }
 
         return allProcessedContacts
@@ -212,54 +221,24 @@ class MainActivity : AppCompatActivity() {
 
         return contactName
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        callLogContacts = readCallLog(this)
-        saveAndReturnContactList("Contacts")
-    }
-
-    // ----- Settings Fragment -----
-    class SettingsFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            addPreferencesFromResource(R.xml.preferences)
-        }
-        // HOW TO DO SETTINGS
-        // val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        // val allowPush = sharedPreferences.getBoolean("allow_push", false)
-        // val defaultTime = sharedPreferences.getInt("default_time", 14)
-    }
-
-    // ----- Notification Channels -----
-    // this will make a channel for you to send notifications in
-    private fun createChannel(id: String, name: String) {
-        val channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH)
-            .apply{}
-
-        channel.description = getString(R.string.app_name)
-
-        val notificationManager = getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(channel)
-
-        Log.d(TAG, "Channel has been created! Ready to send notifications")
-    }
+    // ------ END ------
 
     companion object {
         private val TAG = "CYM-Debug"
 
         private val PREF_FILE = "net.luan.cym.prefs"
 
-        // Hamid code
+        // ----- HAMID -----
         lateinit var gson: Gson
         private lateinit var editor: SharedPreferences.Editor
         lateinit var callLogContacts: ArrayList<Contact>
         fun saveAndReturnContactList(key: String): JsonArray {
             val listJSON = gson.toJson(callLogContacts)
             editor.putString(key, listJSON).commit()
+            editor.apply()
             val parser = JsonParser()
-
             return parser.parse(listJSON).asJsonArray
         }
+        // ------ END ------
     }
 }

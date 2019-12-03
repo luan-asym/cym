@@ -28,10 +28,12 @@ class Contact (name: String, phone: Long, freq: Int, last_contacted: LocalDate,
 
     // initializer
     init {
+        /*
         Log.i(TAG, "Contact created: ${this.name} (${this.phone})" +
                 "\n\t Freq: ${this.freq}, Last contacted: ${this.last_contacted}" +
                 "\n\t Alerts to be sent every: ${this.alert_pref} days" +
                 "\t [${this.whitelisted}]")
+         */
     }
 
     override fun toString(): String {

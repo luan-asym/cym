@@ -9,14 +9,14 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 class SplashActivity : AppCompatActivity() {
-    private var mDelay: Handler? = null
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
+    private var mDelay: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
-        sharedPref = applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
 
         mDelay = Handler()
         mDelay!!.postDelayed(mRunnable, DELAY)
@@ -34,12 +34,17 @@ class SplashActivity : AppCompatActivity() {
         if (!isFinishing) {
             var intent: Intent
 
+            // SharedPreference handler
+            sharedPref = applicationContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
+            editor = sharedPref.edit()
+
             if (sharedPref.getBoolean("FIRST", true)) {
                 Log.d(TAG, "Going to SetupActivity")
                 intent = Intent(applicationContext, SetupActivity::class.java)
             } else {
-                Log.d(TAG, "Going to MainActivity")
+                Log.d(TAG, "Going to ContactManagerActivity")
                 intent = Intent(applicationContext, MainActivity::class.java)
+                editor.putInt("FRAGMENT", R.id.call)
             }
 
             // --- DEBUG ---
@@ -53,8 +58,8 @@ class SplashActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = "CYM-Debug"
-        private val DELAY: Long = 1000
 
         private val PREF_FILE = "net.luan.cym.prefs"
+        private val DELAY: Long = 1000
     }
 }
