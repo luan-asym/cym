@@ -128,17 +128,17 @@ class MainActivity : AppCompatActivity() {
         )
 
         // go through contact list and look for white listed contacts
+        mAlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         for (contact in allContacts) {
             Log.i(TAG, "Going through contact ${contact.name}")
 
             if (!contact.whitelisted) {
                 Log.i(TAG, "${contact.name} IS whitelisted")
 
-
                 // check to if the last time contacted is greater than remainder time
                 val intended_reminder = contact.last_contacted.plusDays(contact.alert_pref.toLong())
                 Log.i(TAG, intended_reminder.toString())
-                if( intended_reminder > LocalDate.now() ) {
+                if( intended_reminder < LocalDate.now() ) {
                     Log.i(TAG, "SENDING ALERT FOR ${contact.name}")
 
                     // if intended reminder is greater than the current LocalDate, send a reminder
