@@ -39,8 +39,9 @@ class StatsFragment : Fragment() {
     // This hashMap is of type Float because it's what the PieChart Library requires... this
     // MIGHT cause issues when we get all the call log data as I assume those will be ints.
     // We definitely will want to figure that out and prevent type issues
-    var hashMap : HashMap<String, Float>
-            = HashMap()
+    val names: MutableList<String> = ArrayList()
+    val freq: MutableList<Float> = ArrayList()
+    val whiteList: MutableList<Boolean> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +53,7 @@ class StatsFragment : Fragment() {
         return inflated
     }
 
-    // Had to make this function and move all the hashMap additions and what not to here, before
+    // Had to make this function and move all the arrays  and what not to here, before
     // I was doing it in onCreateView() and my Ids (like piechart) were returning null because they
     // it is apparently not type-safe to do all your work in there.
     
@@ -63,11 +64,13 @@ class StatsFragment : Fragment() {
         var i = 0
         var contact: Contact
 
-        // Populate the hashMap for statistics
+        // Populate the arrays for statistics
         while (i < temp.size() && i < callLogContacts.size) {
             contact =  gson.fromJson(temp.get(i), Contact::class.java)
             Log.i(TAG, contact.toString())
-            hashMap.put(contact.name.toString(), contact.freq.toFloat())
+            names.add(contact.name)
+            freq.add(contact.freq.toFloat())
+            whiteList.add(contact.whitelisted)
             i++
         }
 
@@ -90,7 +93,7 @@ class StatsFragment : Fragment() {
 
                 Toast.makeText(context!!, chartNames[position], Toast.LENGTH_SHORT).show()
                 if (chartNames[position]=="Pie") {
-                    setupPieChart(hashMap)
+                    setupPieChart(names, freq, whiteList)
                     Log.i("In Spinner", "Setting up Pie Chart")
                     // Set the pichart visible and the barchart to invisible
                     piechart.visibility = View.VISIBLE
@@ -99,7 +102,7 @@ class StatsFragment : Fragment() {
                     Log.i("In spinner selector", "Bar was chosen")
                     piechart.visibility = View.INVISIBLE
                     barchart.visibility = View.VISIBLE
-                    setupBarChart(hashMap)
+                   setupBarChart(names, freq, whiteList)
                 }
             }
 
@@ -114,14 +117,16 @@ class StatsFragment : Fragment() {
     // https://www.youtube.com/watch?v=iS7EgKnyDeY <-- This video was how I learned to do this
     // I suggest you watch it if you want to learn more about the setup and all
 
-    private fun setupPieChart(map : HashMap<String, Float>) {
+    private fun setupPieChart(name: MutableList<String>, freq: MutableList<Float>, wl: MutableList<Boolean>) {
         val pieEntries = arrayListOf<PieEntry>()
 
         // PieCharts with this library require data entries with the following typing (float, string)
-        // for each contact in the Hashmap add the frequency of contact (Value) and the name (Contact)
-        // to pieEntries
-        map.forEach{
-            (contact, value) -> pieEntries.add( PieEntry (value, contact))
+        // for each element in the arrays add the frequency of contact (Value) and the name (Contact)
+        // to pieEntries ONLY if the contact is whitelisted
+        for (i in 0 until name.size) {
+            if (wl[i]) {
+                pieEntries.add(PieEntry(freq[i], name[i]))
+            }
         }
 
         // Initalize the piechart dataset
@@ -148,7 +153,7 @@ class StatsFragment : Fragment() {
     // TODO: Figure out how to do this stupid bar chart. What the heck is this crap
     // TODO: https://github.com/PhilJay/MPAndroidChart/wiki/Setting-Data <-- Use this link
 
-    private fun setupBarChart(map : HashMap<String, Float>) {
+    private fun setupBarChart(name: MutableList<String>, freq: MutableList<Float>, wl: MutableList<Boolean>) {
         val barEntry = arrayListOf<BarEntry>();
         val axis = arrayListOf<String>()
         var count : Float = 0f
@@ -157,12 +162,16 @@ class StatsFragment : Fragment() {
 
 
         // BarCharts with this library require data entries with the following typing (float, float)
-        // for each contact in the Hashmap add the position for the barchart (count) and the times contacted (value)
-        // to pieEntries
-        map.forEach{ (contact, value) -> barEntry.add( BarEntry (count++, value))}
+        // for each contact in the arrays add the position for the barchart (count) and the times contacted (value)
+        // to barEntries ONLY if the contact is whitelisted
+        for (i in 0 until name.size) {
+            if (wl[i]) {
+                barEntry.add(BarEntry(count++, freq[i]))
+                // add x-axis data
+                axis.add(name[i])
+            }
+        }
 
-        // Get a list of contacts for the X-axis
-        map.forEach{ (contact, _) -> axis.add(contact) }
 
         // Initalize the barchart dataset
         val dataSet = BarDataSet(barEntry, "BarDataSet")
