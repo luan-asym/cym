@@ -54,13 +54,9 @@ class StatsFragment : Fragment() {
     // it is apparently not type-safe to do all your work in there.
     
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-
         super.onActivityCreated(savedInstanceState)
+
         contacts = returnContactList()
-
-
-        // -----  END ------
-
         Log.i("Spinner value", spinnerChart.selectedItem.toString())
 
 
@@ -95,12 +91,7 @@ class StatsFragment : Fragment() {
                 Log.i("Spinner", "Nothing was selected")
             }
         }
-
-
     }
-
-    // https://www.youtube.com/watch?v=iS7EgKnyDeY <-- This video was how I learned to do this
-    // I suggest you watch it if you want to learn more about the setup and all
 
     private fun setupPieChart(contacts: ArrayList<Contact>) {
         val pieEntries = arrayListOf<PieEntry>()
@@ -115,7 +106,7 @@ class StatsFragment : Fragment() {
         }
 
         // Initalize the piechart dataset
-        val dataSet = PieDataSet(pieEntries, "Phone calls made")
+        val dataSet = PieDataSet(pieEntries, "Calls Made")
         // set the piechart to use a non-monotonous display
         dataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
         val data = PieData(dataSet)
@@ -139,13 +130,12 @@ class StatsFragment : Fragment() {
     // TODO: https://github.com/PhilJay/MPAndroidChart/wiki/Setting-Data <-- Use this link
 
     private fun setupBarChart(contacts: ArrayList<Contact>) {
-        val barEntry = arrayListOf<BarEntry>();
+        val barEntry = arrayListOf<BarEntry>()
         val axis = arrayListOf<String>()
         var count : Float = 0f
         // Grab the yAxis for formatting later on
-        var yAxis = barchart.getAxisLeft();
+        var yAxis = barchart.getAxisLeft()
         barchart.description.isEnabled = false
-
 
         // BarCharts with this library require data entries with the following typing (float, float)
         // for each contact in the arrays add the position for the barchart (count) and the times contacted (value)
@@ -162,19 +152,15 @@ class StatsFragment : Fragment() {
         Log.d(TAG, count.toString())
 
         // Initalize the barchart dataset
-        val dataSet = BarDataSet(barEntry, "BarDataSet")
+        val dataSet = BarDataSet(barEntry, "")
 
         // set the barchart to use a non-monotonous display
         dataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
         val data = BarData(dataSet)
         data.setValueTextSize(10f)
 
-
-
         if (barchart == null) {
-
             Log.i("In SetupBarChart", "NULL")
-
         } else {
             Log.i("In SetupBarChart", "Not NULL")
 
@@ -188,8 +174,10 @@ class StatsFragment : Fragment() {
             //barchart.xAxis.position = XAxis.XAxisPosition.BOTTOM
             barchart.xAxis.setDrawAxisLine(false)
             barchart.xAxis.setDrawGridLines(false)
+            barchart.xAxis.setDrawLabels(false)
             yAxis.setDrawGridLines(false)
             yAxis.setDrawAxisLine(false)
+            yAxis.setDrawLabels(false)
 
             // Set yAxis to be 0 by default to prevent really skewed graphs
             yAxis.setAxisMinimum(0f)
