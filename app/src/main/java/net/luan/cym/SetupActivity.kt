@@ -46,6 +46,7 @@ class SetupActivity : AppCompatActivity() {
         }
 
         editor.putBoolean("FIRST", false)
+        editor.putBoolean("WHITELISTING_MODE", true)
         editor.apply()
     }
 
@@ -119,8 +120,6 @@ class SetupActivity : AppCompatActivity() {
             }
             else -> {
                 Log.d(TAG, "starting ContactManagerActivity in whitelist mode")
-                editor.putBoolean("WHITELISTING_MODE", true)
-                editor.putInt("FRAGMENT", R.id.call)
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(intent)
                 finish()

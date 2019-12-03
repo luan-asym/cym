@@ -40,6 +40,8 @@ class SplashActivity : AppCompatActivity() {
 
             if (sharedPref.getBoolean("FIRST", true)) {
                 Log.d(TAG, "Going to SetupActivity")
+                editor.putBoolean("WHITELISTING_MODE", true)
+                editor.apply()
                 intent = Intent(applicationContext, SetupActivity::class.java)
             } else {
                 Log.d(TAG, "Going to ContactManagerActivity")
