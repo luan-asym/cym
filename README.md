@@ -1,22 +1,3 @@
 # Call Your Mother Project
 
-Here are the app contributors and their prespective roles:
-
-Luan: UI Design, Splash Screen, Settings
-
-** Please add more, this will be put into the about us page **
-
-Colin: Statistics
-
-
-## Changelog
-
-10/22/2019 (Luan):
-- Added Splash screen
-- Added Preferences xml (settings page)
-- Changed Splash Screen delay (3 sec -> 1 sec)
-- Updated Manifest (default activity is now splash screen)
-- Removed SettingsFragment and all files related
-
---/--/2019 (name):
-- Something?
+This was a project for my Android class. The project was to create an app that reminds you to call selected people. Project was made with contributions by [Colin Huemmer](https://github.com/chuemmer-coding).
